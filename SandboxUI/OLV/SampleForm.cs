@@ -42,7 +42,7 @@ namespace OLV
             objectListView.SetObjects(Parameters);
         }
 
-        private void objectListView_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
+        private void ObjectListView_FormatCell(object sender, BrightIdeasSoftware.FormatCellEventArgs e)
         {
             if (e.ColumnIndex == 0)
             {
@@ -64,7 +64,7 @@ namespace OLV
             SelectedIndex = objectListView.SelectedIndex;
         }
 
-        private void propertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        private void PropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             objectListView.SetObjects(Parameters);
             objectListView.SelectedIndex = SelectedIndex;

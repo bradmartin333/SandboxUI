@@ -74,7 +74,7 @@ namespace OLV
             this.objectListView.UseCellFormatEvents = true;
             this.objectListView.UseCompatibleStateImageBehavior = false;
             this.objectListView.View = System.Windows.Forms.View.Details;
-            this.objectListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.objectListView_FormatCell);
+            this.objectListView.FormatCell += new System.EventHandler<BrightIdeasSoftware.FormatCellEventArgs>(this.ObjectListView_FormatCell);
             this.objectListView.SelectionChanged += new System.EventHandler(this.ObjectListView_SelectionChanged);
             // 
             // olvColumnParameter
@@ -131,7 +131,7 @@ namespace OLV
             this.propertyGrid.Size = new System.Drawing.Size(329, 357);
             this.propertyGrid.TabIndex = 1;
             this.propertyGrid.ToolbarVisible = false;
-            this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid_PropertyValueChanged);
+            this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGrid_PropertyValueChanged);
             // 
             // olvColumnThing
             // 
