@@ -1,3 +1,3 @@
 # SandboxUI
 Testing different UI elements
-- [ObjectListView hybrid with PropertyGrid](https://user-images.githubusercontent.com/19335151/142279707-2ce14c87-8f68-4a3d-bf63-bcac2617e313.mp4)
+- [ObjectListView hybrid with PropertyGrid](https://user-images.githubusercontent.com/19335151/142503194-6ae1bcd5-cc1c-4af5-8931-3e26daf08c63.mp4)
