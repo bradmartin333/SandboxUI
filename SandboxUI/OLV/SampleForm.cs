@@ -9,6 +9,7 @@ namespace OLV
     {
         private List<Parameter> Parameters;
         private int SelectedIndex = -1;
+        private bool PreventSwap = false;
 
         public SampleForm()
         {
@@ -60,14 +61,42 @@ namespace OLV
 
         private void ObjectListView_SelectionChanged(object sender, EventArgs e)
         {
+            if (PreventSwap)
+            {
+                PreventSwap = false;
+                return;
+            }
             propertyGrid.SelectedObject = objectListView.SelectedObject;
             SelectedIndex = objectListView.SelectedIndex;
+            SwapPanes(false);
         }
 
         private void PropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
         {
             objectListView.SetObjects(Parameters);
             objectListView.SelectedIndex = SelectedIndex;
+            btnApply.BackColor = btnApply.FlatAppearance.MouseOverBackColor;
+        }
+
+        private void btnApply_Click(object sender, EventArgs e)
+        {
+            SwapPanes(true);
+            PreventSwap = true;
+            objectListView.DeselectAll();
+        }
+
+        private void SwapPanes(bool showOLV)
+        {
+            if (showOLV)
+            {
+                tableLayoutPanel.SetColumn(tableLayoutPanelGrid, 1);
+                tableLayoutPanel.SetColumn(objectListView, 0);
+            }
+            else
+            {
+                tableLayoutPanel.SetColumn(objectListView, 2);
+                tableLayoutPanel.SetColumn(tableLayoutPanelGrid, 0);
+            }
         }
     }
 }

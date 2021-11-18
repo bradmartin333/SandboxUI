@@ -36,13 +36,16 @@ namespace OLV
             this.objectListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnParameter = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFrequency = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnThing = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.imageListSmall = new System.Windows.Forms.ImageList(this.components);
             this.imageListLarge = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelGrid = new System.Windows.Forms.TableLayoutPanel();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
-            this.olvColumnThing = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.btnApply = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
             this.tableLayoutPanel.SuspendLayout();
+            this.tableLayoutPanelGrid.SuspendLayout();
             this.SuspendLayout();
             // 
             // objectListView
@@ -67,7 +70,7 @@ namespace OLV
             this.objectListView.SelectedBackColor = System.Drawing.Color.LightSteelBlue;
             this.objectListView.ShowGroups = false;
             this.objectListView.ShowImagesOnSubItems = true;
-            this.objectListView.Size = new System.Drawing.Size(328, 357);
+            this.objectListView.Size = new System.Drawing.Size(326, 357);
             this.objectListView.SmallImageList = this.imageListSmall;
             this.objectListView.TabIndex = 0;
             this.objectListView.UnfocusedSelectedBackColor = System.Drawing.Color.LightSteelBlue;
@@ -90,6 +93,10 @@ namespace OLV
             this.olvColumnFrequency.AspectToStringFormat = "";
             this.olvColumnFrequency.ImageAspectName = "FrequencyIcon";
             // 
+            // olvColumnThing
+            // 
+            this.olvColumnThing.ImageAspectName = "ThingIcon";
+            // 
             // imageListSmall
             // 
             this.imageListSmall.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSmall.ImageStream")));
@@ -108,47 +115,77 @@ namespace OLV
             // 
             // tableLayoutPanel
             // 
-            this.tableLayoutPanel.ColumnCount = 2;
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel.ColumnCount = 3;
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
+            this.tableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 0F));
             this.tableLayoutPanel.Controls.Add(this.objectListView, 0, 0);
-            this.tableLayoutPanel.Controls.Add(this.propertyGrid, 1, 0);
+            this.tableLayoutPanel.Controls.Add(this.tableLayoutPanelGrid, 1, 0);
             this.tableLayoutPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel.Name = "tableLayoutPanel";
             this.tableLayoutPanel.RowCount = 1;
             this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 363F));
-            this.tableLayoutPanel.Size = new System.Drawing.Size(669, 363);
+            this.tableLayoutPanel.Size = new System.Drawing.Size(332, 363);
             this.tableLayoutPanel.TabIndex = 1;
+            // 
+            // tableLayoutPanelGrid
+            // 
+            this.tableLayoutPanelGrid.ColumnCount = 1;
+            this.tableLayoutPanelGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelGrid.Controls.Add(this.propertyGrid, 0, 0);
+            this.tableLayoutPanelGrid.Controls.Add(this.btnApply, 0, 1);
+            this.tableLayoutPanelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelGrid.Location = new System.Drawing.Point(335, 3);
+            this.tableLayoutPanelGrid.Name = "tableLayoutPanelGrid";
+            this.tableLayoutPanelGrid.RowCount = 2;
+            this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelGrid.Size = new System.Drawing.Size(1, 357);
+            this.tableLayoutPanelGrid.TabIndex = 2;
             // 
             // propertyGrid
             // 
             this.propertyGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.propertyGrid.Location = new System.Drawing.Point(337, 3);
+            this.propertyGrid.Location = new System.Drawing.Point(3, 3);
             this.propertyGrid.Name = "propertyGrid";
             this.propertyGrid.PropertySort = System.Windows.Forms.PropertySort.Alphabetical;
-            this.propertyGrid.Size = new System.Drawing.Size(329, 357);
+            this.propertyGrid.Size = new System.Drawing.Size(1, 320);
             this.propertyGrid.TabIndex = 1;
             this.propertyGrid.ToolbarVisible = false;
             this.propertyGrid.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.PropertyGrid_PropertyValueChanged);
             // 
-            // olvColumnThing
+            // btnApply
             // 
-            this.olvColumnThing.ImageAspectName = "ThingIcon";
+            this.btnApply.AutoSize = true;
+            this.btnApply.BackColor = System.Drawing.Color.White;
+            this.btnApply.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnApply.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Lime;
+            this.btnApply.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
+            this.btnApply.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnApply.Location = new System.Drawing.Point(3, 329);
+            this.btnApply.Name = "btnApply";
+            this.btnApply.Size = new System.Drawing.Size(1, 25);
+            this.btnApply.TabIndex = 2;
+            this.btnApply.Text = "Apply";
+            this.btnApply.UseVisualStyleBackColor = false;
+            this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
             // SampleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(669, 363);
+            this.ClientSize = new System.Drawing.Size(332, 363);
             this.Controls.Add(this.tableLayoutPanel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
             this.Name = "SampleForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Sample Form";
             this.Load += new System.EventHandler(this.SampleForm_Load);
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).EndInit();
             this.tableLayoutPanel.ResumeLayout(false);
+            this.tableLayoutPanelGrid.ResumeLayout(false);
+            this.tableLayoutPanelGrid.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -163,5 +200,7 @@ namespace OLV
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.ImageList imageListSmall;
         private BrightIdeasSoftware.OLVColumn olvColumnThing;
+        private TableLayoutPanel tableLayoutPanelGrid;
+        private Button btnApply;
     }
 }
