@@ -66,6 +66,7 @@ namespace OLV
                 PreventSwap = false;
                 return;
             }
+            lblActiveParameter.Text = ((Parameter)objectListView.SelectedObject).ParameterName;
             propertyGrid.SelectedObject = objectListView.SelectedObject;
             SelectedIndex = objectListView.SelectedIndex;
             SwapPanes(false);

@@ -43,6 +43,7 @@ namespace OLV
             this.tableLayoutPanelGrid = new System.Windows.Forms.TableLayoutPanel();
             this.propertyGrid = new System.Windows.Forms.PropertyGrid();
             this.btnApply = new System.Windows.Forms.Button();
+            this.lblActiveParameter = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.objectListView)).BeginInit();
             this.tableLayoutPanel.SuspendLayout();
             this.tableLayoutPanelGrid.SuspendLayout();
@@ -133,12 +134,14 @@ namespace OLV
             // 
             this.tableLayoutPanelGrid.ColumnCount = 1;
             this.tableLayoutPanelGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanelGrid.Controls.Add(this.propertyGrid, 0, 0);
-            this.tableLayoutPanelGrid.Controls.Add(this.btnApply, 0, 1);
+            this.tableLayoutPanelGrid.Controls.Add(this.propertyGrid, 0, 1);
+            this.tableLayoutPanelGrid.Controls.Add(this.btnApply, 0, 2);
+            this.tableLayoutPanelGrid.Controls.Add(this.lblActiveParameter, 0, 0);
             this.tableLayoutPanelGrid.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanelGrid.Location = new System.Drawing.Point(335, 3);
             this.tableLayoutPanelGrid.Name = "tableLayoutPanelGrid";
-            this.tableLayoutPanelGrid.RowCount = 2;
+            this.tableLayoutPanelGrid.RowCount = 3;
+            this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelGrid.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanelGrid.Size = new System.Drawing.Size(1, 357);
@@ -171,6 +174,18 @@ namespace OLV
             this.btnApply.UseVisualStyleBackColor = false;
             this.btnApply.Click += new System.EventHandler(this.btnApply_Click);
             // 
+            // lblActiveParameter
+            // 
+            this.lblActiveParameter.AutoSize = true;
+            this.lblActiveParameter.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.lblActiveParameter.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblActiveParameter.Location = new System.Drawing.Point(3, 0);
+            this.lblActiveParameter.Name = "lblActiveParameter";
+            this.lblActiveParameter.Size = new System.Drawing.Size(1, 1);
+            this.lblActiveParameter.TabIndex = 3;
+            this.lblActiveParameter.Text = "label1";
+            this.lblActiveParameter.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SampleForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -202,5 +217,6 @@ namespace OLV
         private BrightIdeasSoftware.OLVColumn olvColumnThing;
         private TableLayoutPanel tableLayoutPanelGrid;
         private Button btnApply;
+        private Label lblActiveParameter;
     }
 }
