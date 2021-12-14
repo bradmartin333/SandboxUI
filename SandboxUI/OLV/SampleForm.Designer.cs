@@ -103,16 +103,17 @@ namespace OLV
             this.imageListSmall.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSmall.ImageStream")));
             this.imageListSmall.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListSmall.Images.SetKeyName(0, "cycle");
-            this.imageListSmall.Images.SetKeyName(1, "Double");
-            this.imageListSmall.Images.SetKeyName(2, "Single");
-            this.imageListSmall.Images.SetKeyName(3, "Triple");
+            this.imageListSmall.Images.SetKeyName(1, "horizontal");
+            this.imageListSmall.Images.SetKeyName(2, "vertical");
+            this.imageListSmall.Images.SetKeyName(3, "single");
             // 
             // imageListLarge
             // 
             this.imageListLarge.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListLarge.ImageStream")));
             this.imageListLarge.TransparentColor = System.Drawing.Color.Transparent;
-            this.imageListLarge.Images.SetKeyName(0, "null");
-            this.imageListLarge.Images.SetKeyName(1, "check");
+            this.imageListLarge.Images.SetKeyName(0, "check");
+            this.imageListLarge.Images.SetKeyName(1, "null");
+            this.imageListLarge.Images.SetKeyName(2, "doublecheck");
             // 
             // tableLayoutPanel
             // 

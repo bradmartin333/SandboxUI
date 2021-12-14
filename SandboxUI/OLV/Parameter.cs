@@ -4,25 +4,25 @@ namespace OLV
 {
     public class Parameter
     {
-        public enum Something
+        public enum Alignment
         {
             Single,
-            Double,
-            Triple,
+            Horizontal,
+            Vertical,
             Null
         }
 
-        private Something _Thing;
+        private Alignment _AlignmentSelection;
         [
             Category("User Parameters"),
             Description("Some Enum")
         ]
-        public Something Thing
+        public Alignment AlignmentSelection
         {
-            get => _Thing;
+            get => _AlignmentSelection;
             set
             {
-                _Thing = value;
+                _AlignmentSelection = value;
             }
         }
 
@@ -37,7 +37,22 @@ namespace OLV
             set
             {
                 _Enable = value;
-                ParameterIcon = _Enable ? "check" : "null";
+                ParameterIcon = _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
+            }
+        }
+
+        private bool _AutoEnable;
+        [
+            Category("User Parameters"),
+            Description("Enable Parameter")
+        ]
+        public bool AutoEnable
+        {
+            get => _AutoEnable;
+            set
+            {
+                _AutoEnable = value;
+                ParameterIcon = _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
             }
         }
 
@@ -80,7 +95,7 @@ namespace OLV
         public string FrequencyIcon { get; set; } = "";
         public string ThingIcon 
         {
-            get => _Thing.ToString();
+            get => _AlignmentSelection.ToString();
         }
 
         public Parameter(
@@ -89,14 +104,14 @@ namespace OLV
             bool Enable = false,
             bool Cycle = false,
             int Frequency = 1,
-            Something Thing = Something.Null)
+            Alignment Thing = Alignment.Null)
         {
             this.ParameterName = ParameterName;
             this.Description = Description;
             this.Enable = Enable;
             this.Cycle = Cycle;
             this.Frequency = Frequency;
-            this.Thing = Thing;
+            this.AlignmentSelection = Thing;
         }
     }
 }
