@@ -114,6 +114,7 @@ namespace OLV
             this.imageListLarge.Images.SetKeyName(0, "check");
             this.imageListLarge.Images.SetKeyName(1, "null");
             this.imageListLarge.Images.SetKeyName(2, "doublecheck");
+            this.imageListLarge.Images.SetKeyName(3, "locked");
             // 
             // tableLayoutPanel
             // 

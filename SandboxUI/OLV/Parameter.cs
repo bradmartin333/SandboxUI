@@ -26,6 +26,21 @@ namespace OLV
             }
         }
 
+        private bool _Locked;
+        [
+            Category("User Parameters"),
+            Description("Enable Parameter")
+        ]
+        public bool Locked
+        {
+            get => _Locked;
+            set
+            {
+                _Locked = value;
+                ParameterIcon = _Locked ? "locked" : _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
+            }
+        }
+
         private bool _Enable;
         [
             Category("User Parameters"),
@@ -37,7 +52,7 @@ namespace OLV
             set
             {
                 _Enable = value;
-                ParameterIcon = _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
+                ParameterIcon = _Locked ? "locked" : _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
             }
         }
 
@@ -52,7 +67,7 @@ namespace OLV
             set
             {
                 _AutoEnable = value;
-                ParameterIcon = _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
+                ParameterIcon = _Locked ? "locked" : _Enable ? _AutoEnable ? "doublecheck" : "check" : "null";
             }
         }
 
