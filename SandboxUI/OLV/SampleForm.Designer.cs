@@ -36,7 +36,7 @@ namespace OLV
             this.objectListView = new BrightIdeasSoftware.ObjectListView();
             this.olvColumnParameter = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.olvColumnFrequency = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.olvColumnThing = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.olvColumnAlignment = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.imageListSmall = new System.Windows.Forms.ImageList(this.components);
             this.imageListLarge = new System.Windows.Forms.ImageList(this.components);
             this.tableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
@@ -53,12 +53,12 @@ namespace OLV
             // 
             this.objectListView.AllColumns.Add(this.olvColumnParameter);
             this.objectListView.AllColumns.Add(this.olvColumnFrequency);
-            this.objectListView.AllColumns.Add(this.olvColumnThing);
+            this.objectListView.AllColumns.Add(this.olvColumnAlignment);
             this.objectListView.CellEditUseWholeCell = false;
             this.objectListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.olvColumnParameter,
             this.olvColumnFrequency,
-            this.olvColumnThing});
+            this.olvColumnAlignment});
             this.objectListView.Cursor = System.Windows.Forms.Cursors.Default;
             this.objectListView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.objectListView.FullRowSelect = true;
@@ -94,9 +94,9 @@ namespace OLV
             this.olvColumnFrequency.AspectToStringFormat = "";
             this.olvColumnFrequency.ImageAspectName = "FrequencyIcon";
             // 
-            // olvColumnThing
+            // olvColumnAlignment
             // 
-            this.olvColumnThing.ImageAspectName = "ThingIcon";
+            this.olvColumnAlignment.ImageAspectName = "AlignmentIcon";
             // 
             // imageListSmall
             // 
@@ -216,7 +216,7 @@ namespace OLV
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel;
         private System.Windows.Forms.PropertyGrid propertyGrid;
         private System.Windows.Forms.ImageList imageListSmall;
-        private BrightIdeasSoftware.OLVColumn olvColumnThing;
+        private BrightIdeasSoftware.OLVColumn olvColumnAlignment;
         private TableLayoutPanel tableLayoutPanelGrid;
         private Button btnApply;
         private Label lblActiveParameter;

@@ -7,15 +7,15 @@ namespace OLV
         public enum Alignment
         {
             Single,
-            Horizontal,
-            Vertical,
+            Rotational,
             Null
         }
 
         private Alignment _AlignmentSelection;
         [
             Category("User Parameters"),
-            Description("Some Enum")
+            Description("Single or Rotational"),
+            DisplayName("Alignment Selection")
         ]
         public Alignment AlignmentSelection
         {
@@ -23,6 +23,27 @@ namespace OLV
             set
             {
                 _AlignmentSelection = value;
+            }
+        }
+
+        public enum RotationalAlignment
+        {
+            Horizontal,
+            Vertical
+        }
+
+        private RotationalAlignment _RotationalAlignmentSelection;
+        [
+            Category("User Parameters"),
+            Description("Vertical or Horizontal"),
+            DisplayName("Rotational Selection")
+        ]
+        public RotationalAlignment RotationalAlignmentSelection
+        {
+            get => _RotationalAlignmentSelection;
+            set
+            {
+                _RotationalAlignmentSelection = value;
             }
         }
 
@@ -108,9 +129,22 @@ namespace OLV
         public string Description { get; set; }
         public string FrequencyString { get; set; } = "";
         public string FrequencyIcon { get; set; } = "";
-        public string ThingIcon 
+        public string AlignmentIcon 
         {
-            get => _AlignmentSelection.ToString();
+            get
+            {
+                switch (_AlignmentSelection)
+                {
+                    case Alignment.Single:
+                        return "single";
+                    case Alignment.Rotational:
+                        return _RotationalAlignmentSelection.ToString();
+                    case Alignment.Null:
+                        return "null";
+                    default:
+                        return "null";
+                }
+            }
         }
 
         public Parameter(
@@ -119,14 +153,16 @@ namespace OLV
             bool Enable = false,
             bool Cycle = false,
             int Frequency = 1,
-            Alignment Thing = Alignment.Null)
+            Alignment AlignmentSelection = Alignment.Null,
+            RotationalAlignment RotationalAlignmentSelection = RotationalAlignment.Horizontal)
         {
             this.ParameterName = ParameterName;
             this.Description = Description;
             this.Enable = Enable;
             this.Cycle = Cycle;
             this.Frequency = Frequency;
-            this.AlignmentSelection = Thing;
+            this.AlignmentSelection = AlignmentSelection;
+            this.RotationalAlignmentSelection = RotationalAlignmentSelection;
         }
     }
 }
