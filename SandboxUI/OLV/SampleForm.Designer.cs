@@ -103,9 +103,9 @@ namespace OLV
             this.imageListSmall.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageListSmall.ImageStream")));
             this.imageListSmall.TransparentColor = System.Drawing.Color.Transparent;
             this.imageListSmall.Images.SetKeyName(0, "cycle");
-            this.imageListSmall.Images.SetKeyName(1, "single");
-            this.imageListSmall.Images.SetKeyName(2, "horizontal");
-            this.imageListSmall.Images.SetKeyName(3, "vertical");
+            this.imageListSmall.Images.SetKeyName(1, "horizontal");
+            this.imageListSmall.Images.SetKeyName(2, "vertical");
+            this.imageListSmall.Images.SetKeyName(3, "single");
             // 
             // imageListLarge
             // 
