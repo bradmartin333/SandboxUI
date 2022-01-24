@@ -30,6 +30,8 @@ namespace ExtechPlotter
                                 }
                                 plotData.Add(double.Parse(cols[3]));
                             }
+                            else
+                                plotData.Add(0);
                         }
                     }
                 }
