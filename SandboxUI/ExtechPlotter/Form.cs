@@ -2,14 +2,15 @@ namespace ExtechPlotter
 {
     public partial class Form : System.Windows.Forms.Form
     {
-        public Form(string[] dirs)
+        public Form(string[] dirs, int trim)
         {
             InitializeComponent();
 
-            List<double> plotData = new List<double>();
+            List<(int, double)> plotData = new List<(int, double)>();
             DateTime start = DateTime.MinValue;
             string label = string.Empty;
 
+            int idx = 0;
             try
             {
                 foreach (string dir in dirs)
@@ -28,10 +29,11 @@ namespace ExtechPlotter
                                     start = DateTime.Parse($"{cols[1]} {cols[2]}");
                                     label = cols[4];
                                 }
-                                plotData.Add(double.Parse(cols[3]));
+                                plotData.Add((idx, double.Parse(cols[3])));
                             }
                             else
-                                plotData.Add(0);
+                                plotData.Add((idx, 0));
+                            idx++;
                         }
                     }
                 }
@@ -42,7 +44,10 @@ namespace ExtechPlotter
                 return;
             }
 
-            var sig = formsPlot.Plot.AddSignal(plotData.ToArray(), 24 * 60 * 60); // Num points in a day
+            int numPointsInADay = 24 * 60 * 60;
+            var sig = formsPlot.Plot.AddSignal(
+                plotData.Where(x => x.Item1 > trim && x.Item1 < (idx - trim)).Select(x => x.Item2).ToArray(), 
+                numPointsInADay);
             sig.OffsetX = start.ToOADate();
             formsPlot.Plot.Title("Extech Data Log");
             formsPlot.Plot.SetCulture(System.Globalization.CultureInfo.CurrentCulture);
