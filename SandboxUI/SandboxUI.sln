@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExtechPlotter", "ExtechPlot
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainboxesTest", "BrainboxesTest\BrainboxesTest.csproj", "{35E04B0B-E5DF-4E9F-AFA8-7054A70F99B3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProjectorMapping", "ProjectorMapping\ProjectorMapping.csproj", "{15D874BC-CAEF-4F56-A8B8-10EF273D3669}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ProjectorMapping", "ProjectorMapping\ProjectorMapping.csproj", "{15D874BC-CAEF-4F56-A8B8-10EF273D3669}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArasAPI", "ArasAPI\ArasAPI.csproj", "{576360CA-F58F-459C-BB5E-19DE9F429A2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{15D874BC-CAEF-4F56-A8B8-10EF273D3669}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15D874BC-CAEF-4F56-A8B8-10EF273D3669}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15D874BC-CAEF-4F56-A8B8-10EF273D3669}.Release|Any CPU.Build.0 = Release|Any CPU
+		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
