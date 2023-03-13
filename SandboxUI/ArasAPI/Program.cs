@@ -39,10 +39,21 @@ namespace ArasAPI
                 foundParts.AddRange(newParts);
             }
 
+            int idx = 0;
             var groups = foundParts.GroupBy(x => x.ItemNumber);
             foreach (var group in groups)
-                Console.WriteLine(group.First());
+            {
+                foreach (var item in group)
+                    item.GroupID = ((char)(idx + 66)).ToString();
+                idx++;
+            }
 
+            List<string> relationships = new List<string>();
+            foreach (var foundPart in foundParts)
+                relationships.Add(foundPart.ToString());
+            relationships = relationships.Distinct().ToList();
+            foreach (var relationship in relationships)
+                Console.WriteLine(relationship);
             Console.ReadKey();
         }
 
@@ -57,19 +68,18 @@ namespace ArasAPI
     {
         public string ID { get; set; }
         public string ItemNumber { get; set; }
-        public string MajorRev { get; set; }
-        public string Generation { get; set; }
+        public string Name { get; set; }
         public FoundPart Child { get; set; } = null;
         public bool Complete = false;
+        public string GroupID { get; set; }
 
         public FoundPart(IReadOnlyElement partInfo) 
         { 
             ID = partInfo.Element("id").Value;
             ItemNumber = partInfo.Element("item_number").Value;
-            MajorRev = partInfo.Element("major_rev").Value;
-            Generation = partInfo.Element("generation").Value;
+            Name = partInfo.Element("name").Value;
         }
 
-        public override string ToString() => $"{ItemNumber} -> {(Child == null ? "none" : Child.ItemNumber)}";
+        public override string ToString() => $"{GroupID}[{ItemNumber} {Name}]{(Child == null ? "" : $" --> {Child.GroupID}[{Child.ItemNumber} {Child.Name}];")}";
     }
 }
