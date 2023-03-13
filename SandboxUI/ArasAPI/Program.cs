@@ -7,6 +7,8 @@ namespace ArasAPI
 {
     internal class Program
     {
+        private static IRemoteConnection Connection;
+
         static void Main(string[] args)
         {
             // Welcome
@@ -14,9 +16,9 @@ namespace ArasAPI
             Console.WriteLine("Here a where-used tree is generated from a part ID\n");
 
             // Connect to Parata's Aras database with credentials
-            IRemoteConnection conn = Factory.GetConnection("http://ps-aras/InnovatorServer/Server/", "BMartin");
-            string database = conn.GetDatabases().First();
-            conn.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
+            Connection = Factory.GetConnection("http://ps-aras/InnovatorServer/Server/", "BMartin");
+            string database = Connection.GetDatabases().First();
+            Connection.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
 
             // Prompt user for initial ID
             // string initialID = "2BE9E92A012F4803AD1933D1D8C101B6";
@@ -25,15 +27,14 @@ namespace ArasAPI
             Console.Write("Working...");
 
             // Recursively find parents and add them to the list as new parts
-            List<FoundPart> foundParts = new List<FoundPart>() { PartFromID(initialID, conn) };
+            List<FoundPart> foundParts = new List<FoundPart>() { PartFromID(initialID) };
             while(true)
             {
                 List<FoundPart> iterParts = foundParts.Where(x => !x.Complete).ToList();
                 if (iterParts.Count == 0) break; // Every part and its parent has been checked
-                List<FoundPart> newParts = new List<FoundPart>();
                 foreach(FoundPart part in iterParts)
                 {
-                    IReadOnlyElement[] whereUsed = conn.Apply($@"<Item type='Part' id='{part.ID}' action='getItemWhereUsed'/>")
+                    IReadOnlyElement[] whereUsed = Connection.Apply($@"<Item type='Part' id='{part.ID}' action='getItemWhereUsed'/>")
                                                        .Items().First().Elements().ToArray();
                     if (whereUsed.Any())
                     {
@@ -41,15 +42,14 @@ namespace ArasAPI
                                                               .Where(x => x.Attribute("type").Value == "Part").ToArray();
                         foreach (var parent in parents)
                         {
-                            FoundPart newPart = PartFromID(parent.ToXml().Attribute("id").Value, conn);
+                            FoundPart newPart = PartFromID(parent.ToXml().Attribute("id").Value);
                             newPart.Child = part;
-                            newParts.Add(newPart);
+                            foundParts.Add(newPart);
                             Console.Write(".");
                         }
                     }
                     part.Complete = true;
                 }
-                foundParts.AddRange(newParts);
             }
 
             // Assign a graph node letter to each part
@@ -63,12 +63,10 @@ namespace ArasAPI
             }
 
             // Remove replicates but preserve relationships and make graph string
-            List<string> relationships = new List<string>();
-            foreach (var foundPart in foundParts)
-                relationships.Add(foundPart.ToString());
-            relationships = relationships.Distinct().ToList();
+            List<string> relationships = foundParts.Select(x => x.ToString()).Distinct().ToList();
             string graph = string.Join("\n", relationships);
 
+            // Create .html and open it in browser
             Console.WriteLine();
             Console.WriteLine("Making graph...");
             string html = System.IO.File.ReadAllText("mermaid.html");
@@ -77,9 +75,9 @@ namespace ArasAPI
             System.Diagnostics.Process.Start("index.html");
         }
 
-        internal static FoundPart PartFromID(string id, IRemoteConnection conn)
+        internal static FoundPart PartFromID(string id)
         {
-            IReadOnlyItem initialPartInfo = conn.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
+            IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
             return new FoundPart(initialPartInfo);
         }
     }
