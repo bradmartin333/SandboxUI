@@ -1,0 +1,31 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script type="module" src="https://unpkg.com/mermaid@8.14.0/dist/mermaid.min.js"></script>
+</head>
+
+<body style="text-align: center;">
+    <pre class="mermaid">
+        <code>
+            graph TD;
+            ###GRAPH###
+        </code>
+    </pre>
+
+    <script>
+        // select <pre class="mermaid"> _and_ <pre><code class="language-mermaid">
+        document.querySelectorAll("pre.mermaid, pre>code.language-mermaid").forEach($el => {
+            // if the second selector got a hit, reference the parent <pre>
+            if ($el.tagName === "CODE")
+                $el = $el.parentElement
+            // put the Mermaid contents in the expected <div class="mermaid">
+            $el.outerHTML = `<div class="mermaid">${$el.textContent}</div>`
+        })
+    </script>
+</body>
+
+</html>
