@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BrainboxesTest", "Brainboxe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArasAPI", "ArasAPI\ArasAPI.csproj", "{576360CA-F58F-459C-BB5E-19DE9F429A2B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Show-N-Tell", "Show-N-Tell\Show-N-Tell.csproj", "{1A10B17B-5511-4850-A3FD-DB67977E877D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576360CA-F58F-459C-BB5E-19DE9F429A2B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A10B17B-5511-4850-A3FD-DB67977E877D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A10B17B-5511-4850-A3FD-DB67977E877D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A10B17B-5511-4850-A3FD-DB67977E877D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A10B17B-5511-4850-A3FD-DB67977E877D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
