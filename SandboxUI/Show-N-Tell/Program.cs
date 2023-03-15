@@ -12,6 +12,7 @@ Agenda agenda = new(audio, new List<string>()
     "Manipulation of video/audio files",
     "Creating and maintaining hardware testers",
     "Plotting data in Excel",
+    "Create documentation",
     "Aras for where-used hierarchy",
     "SolidWorks for design of new 3D parts",
     "Keep computer from going idle for long processes",
