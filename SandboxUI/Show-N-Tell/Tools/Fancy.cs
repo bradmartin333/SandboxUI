@@ -1,4 +1,4 @@
-﻿namespace Show_N_Tell
+﻿namespace Show_N_Tell.Tools
 {
     internal static class Fancy
     {

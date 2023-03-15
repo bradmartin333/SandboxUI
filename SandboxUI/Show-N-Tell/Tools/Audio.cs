@@ -1,7 +1,7 @@
 ﻿using NAudio.Wave;
 using System.Diagnostics;
 
-namespace Show_N_Tell
+namespace Show_N_Tell.Tools
 {
     internal class Audio : IDisposable
     {
