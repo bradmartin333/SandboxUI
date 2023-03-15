@@ -29,7 +29,7 @@
             for (int i = 0; i < LongestPrompt - prompt.Length; i++)
                 Console.Write(" ");
             
-            int msDelay = 100;
+            int msDelay = 5;
             int samplingTimeSeconds = 5;
             int lastNumBars = 0;
             for (int i = 0; i < samplingTimeSeconds * 1000 / msDelay; i++)
@@ -38,11 +38,11 @@
                 if (thisNumBars > lastNumBars)
                 {
                     for (int j = 0; j < thisNumBars - lastNumBars; j++)
-                        Console.Write("#");
+                        Console.Write("|");
                     lastNumBars = thisNumBars;
                     if (lastNumBars >= audio.MaxBars / 2) // Peaking
                     {
-                        Console.Write("!!!");
+                        Console.Write(">>>");
                         Thread.Sleep(1000); // Let people settle down
                         break;
                     }
