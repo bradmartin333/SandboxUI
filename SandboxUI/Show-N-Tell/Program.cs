@@ -1,6 +1,10 @@
 ﻿using Show_N_Tell.Tools;
 
 using Audio audio = new();
+Task.Run(() => audio.BeginCalibration());
+Console.ReadLine();
+Task.Run(() => audio.EndCalibration());
+Console.ReadLine();
 
 Fancy.PrintTitle();
 Console.ReadLine();

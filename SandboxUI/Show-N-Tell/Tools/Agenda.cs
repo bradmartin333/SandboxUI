@@ -40,7 +40,7 @@
                     for (int j = 0; j < thisNumBars - lastNumBars; j++)
                         Console.Write("|");
                     lastNumBars = thisNumBars;
-                    if (lastNumBars >= audio.MaxBars / 2) // Peaking
+                    if (lastNumBars >= audio.MaxBars * 0.9f) // Peaking
                     {
                         Console.Write(">>>");
                         Thread.Sleep(1000); // Let people settle down
