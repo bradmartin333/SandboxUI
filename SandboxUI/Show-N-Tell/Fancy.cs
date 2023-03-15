@@ -2,7 +2,6 @@
 {
     internal static class Fancy
     {
-        private static int ThanksCounter = 0;
         private static readonly string Title = $@"
 _____/\\\\\\\\\\\____/\\\________________________________________________________/\\\\\_____/\\\________________/\\\\\\\\\\\\\\\_________________/\\\\\\_____/\\\\\\____        
  ___/\\\/////////\\\_\/\\\_______________________________________________________\/\\\\\\___\/\\\_______________\///////\\\/////_________________\////\\\____\////\\\____       
@@ -51,18 +50,21 @@ Yb,_    88       Yb, `88       88          dP   88Yb, `8dP'     `88Yb, `88      
             Console.WriteLine();
         }
 
-        internal static void SayThanks()
+        private static int lastNumBars = -1;
+        internal static void SayThanks(Audio audio)
         {
-            Console.Clear();
-            Console.ForegroundColor = (ThanksCounter % 3) switch
+            while (true)
             {
-                0 => ConsoleColor.Red,
-                1 => ConsoleColor.Green,
-                _ => ConsoleColor.Blue,
-            };
-            Console.Write(ThankYou);
-            Console.ForegroundColor = ConsoleColor.White;
-            ThanksCounter++;
+                int thisNumBars = audio.Bars;
+                if (thisNumBars != lastNumBars)
+                {
+                    Console.Clear();
+                    Console.ForegroundColor = (ConsoleColor)Math.Clamp(15 - thisNumBars, 1, 15);
+                    Console.Write(ThankYou);
+                    lastNumBars = thisNumBars;
+                }
+                Thread.Sleep(250);
+            }
         }
     }
 }

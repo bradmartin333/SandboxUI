@@ -5,10 +5,8 @@
         private readonly int LongestPrompt = 0;
         private readonly List<(float, string)> AgendaList = new();
 
-        internal Agenda(List<string> prompts)
+        internal Agenda(Audio audio, List<string> prompts)
         {
-            using Audio audio = new();
-
             foreach (string prompt in prompts)
                 if (prompt.Length > LongestPrompt) LongestPrompt = prompt.Length;
 
@@ -16,19 +14,21 @@
             foreach (string prompt in prompts)
                 AgendaList.Add(GetPromptVal(prompt, audio));
 
-            // Sort list by user input in descending order
+            // Sort list by user input in descending order and run
             AgendaList.Sort((x, y) => y.Item1.CompareTo(x.Item1));
+            Run();
         }
 
         private (float, string) GetPromptVal(string prompt, Audio audio)
         {
-            Console.Write(prompt + ": ");
+            Console.Write(prompt);
+            Thread.Sleep(3000);
+            Console.Write(": ");
 
             // Add extra spaces so the audio bars start in the same place
             for (int i = 0; i < LongestPrompt - prompt.Length; i++)
                 Console.Write(" ");
-
-            Thread.Sleep(1000);
+            
             int msDelay = 100;
             int samplingTimeSeconds = 5;
             int lastNumBars = 0;
@@ -50,10 +50,11 @@
                 Thread.Sleep(msDelay);
             }
             Console.WriteLine();
+
             return (lastNumBars, prompt);
         }
 
-        internal void Run()
+        private void Run()
         {
             for (int i = 0; i < AgendaList.Count; i++)
             {
@@ -64,6 +65,7 @@
                     Console.WriteLine(AgendaList[j].Item2);
                 }
                 Console.ForegroundColor = ConsoleColor.White;
+                Console.WriteLine();
                 Console.ReadLine();
             }
         }
