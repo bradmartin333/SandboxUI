@@ -43,6 +43,8 @@ namespace ArasAPI
                         foreach (var parent in parents)
                         {
                             FoundPart newPart = PartFromID(parent.ToXml().Attribute("id").Value);
+                            string name = newPart.Name.ToLower();
+                            if (name.Contains("deprecated") || name.Contains("replaced")) break;
                             newPart.Child = part;
                             foundParts.Add(newPart);
                             Console.Write(".");
@@ -58,7 +60,7 @@ namespace ArasAPI
             foreach (var group in groups)
             {
                 foreach (var item in group)
-                    item.GroupID = ((char)(idx + 65)).ToString();
+                    item.GroupID = ((char)Clamp(idx + 65, 65, 90)).ToString() + idx.ToString();
                 idx++;
             }
 
@@ -80,6 +82,13 @@ namespace ArasAPI
             IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
             return new FoundPart(initialPartInfo);
         }
+
+        private static int Clamp(int val, int min, int max)
+        {
+            if (val.CompareTo(min) < 0) return min;
+            else if (val.CompareTo(max) > 0) return max;
+            else return val;
+        }
     }
 
     internal class FoundPart
@@ -95,12 +104,12 @@ namespace ArasAPI
         { 
             ID = partInfo.Element("id").Value;
             ItemNumber = partInfo.Element("item_number").Value;
-            Name = partInfo.Element("name").Value;
+            Name = partInfo.Element("name").Value.Replace("\"", "in.");
         }
 
         public override string ToString()
         {
-            return $"{GroupID}[{ItemNumber} {Name}]{(Child == null ? "" : $" --> {Child.GroupID}[{Child.ItemNumber} {Child.Name}];")}";
+            return $"{GroupID}[\"{ItemNumber} {Name}\"]{(Child == null ? "" : $" --> {Child.GroupID}[\"{Child.ItemNumber} {Child.Name}\"]")};";
         }
     }
 }
