@@ -61,10 +61,9 @@ for (int i = 0; i < raw.Length; i++)
         pwm.BackgroundColor = Color.White;
         pwm.BorderColor = Color.White;
         if (j % 2 == 0)
-        {
             sig.LineWidth = 4;
+        else
             pwm.Font.Bold = true;
-        }
     }
 }
 
