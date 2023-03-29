@@ -12,7 +12,6 @@ Console.ReadLine();
 Agenda agenda = new(audio, new List<string>()
 {
     "Maintaining hardware testers",
-    "Plotting data in Excel",
     "Documentation",
     "Aras for where-used hierarchy",
     "Keep computer from going idle",
