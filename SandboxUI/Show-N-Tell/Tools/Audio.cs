@@ -5,7 +5,7 @@ namespace Show_N_Tell.Tools
     internal class Audio : IDisposable
     {
         float MaxValue = 1;
-        internal int MaxBars = 100;
+        internal int MaxBars = 125;
         internal int Bars { get; set; } = 0;
 
         private WaveInEvent? WaveIn = null;
