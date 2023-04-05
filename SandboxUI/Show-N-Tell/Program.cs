@@ -9,13 +9,13 @@ Console.ReadLine();
 Fancy.PrintTitle();
 Console.ReadLine();
 
-Agenda agenda = new(audio, new List<string>()
+Agenda agenda = new(audio, new List<(string, string)>()
 {
-    "Maintaining hardware testers",
-    "Documentation",
-    "Aras for where-used hierarchy",
-    "Keep computer from going idle",
-    "Creating flowcharts",
+    ("Hardware testers", "Batter_01FEB2023.pptx, APMC video"),
+    ("Documentation", "README.md, overleaf, typst"),
+    ("Aras automation", "ArasAPI demo"),
+    ("Flowcharts", "mermaid.js"),
+    ("AI", "Bard, testai.py"),
 });
 
 Task.Run(() => Fancy.SayThanks(audio));

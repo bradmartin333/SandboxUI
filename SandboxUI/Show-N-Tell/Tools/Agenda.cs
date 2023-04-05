@@ -3,15 +3,15 @@
     internal class Agenda
     {
         private readonly int LongestPrompt = 0;
-        private readonly List<(float, string)> AgendaList = new();
+        private readonly List<(float, (string, string))> AgendaList = new();
 
-        internal Agenda(Audio audio, List<string> prompts)
+        internal Agenda(Audio audio, List<(string, string)> prompts)
         {
-            foreach (string prompt in prompts)
-                if (prompt.Length > LongestPrompt) LongestPrompt = prompt.Length;
+            foreach ((string, string) prompt in prompts)
+                if (prompt.Item1.Length > LongestPrompt) LongestPrompt = prompt.Item1.Length;
 
             // Build list of tuples from user input audio
-            foreach (string prompt in prompts)
+            foreach ((string, string) prompt in prompts)
                 AgendaList.Add(GetPromptVal(prompt, audio));
 
             // Sort list by user input in descending order and run
@@ -19,14 +19,14 @@
             Run();
         }
 
-        private (float, string) GetPromptVal(string prompt, Audio audio)
+        private (float, (string, string)) GetPromptVal((string, string) prompt, Audio audio)
         {
-            Console.Write(prompt);
+            Console.Write(prompt.Item1);
             Thread.Sleep(3000);
             Console.Write(": ");
 
             // Add extra spaces so the audio bars start in the same place
-            for (int i = 0; i < LongestPrompt - prompt.Length; i++)
+            for (int i = 0; i < LongestPrompt - prompt.Item1.Length; i++)
                 Console.Write(" ");
             
             int msDelay = 5;
@@ -62,7 +62,9 @@
                 for (int j = 0; j < AgendaList.Count; j++)
                 {
                     Console.ForegroundColor = i == j ? ConsoleColor.Green : ConsoleColor.White;
-                    Console.WriteLine(AgendaList[j].Item2);
+                    Console.Write(AgendaList[j].Item2.Item1);
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine(": " + AgendaList[j].Item2.Item2);
                 }
                 Console.ForegroundColor = ConsoleColor.White;
                 Console.WriteLine();
