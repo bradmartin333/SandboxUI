@@ -22,15 +22,13 @@ with open(filepath) as fp:
     while line:
         if 'Group = "CutAndRoll"' in line:
             line = line.strip()
-            varname = fp.readline().strip().split(' ')[3]
-            unused = line[0:2] == '//'
             items = line[:-2].split(', ')[1:]
             thissubgroup = items[0].split('"')[1]
             if thissubgroup != lastsubgroup:
                 outputstr += '\n***' + thissubgroup + '***\n'
                 lastsubgroup = thissubgroup
-            outputstr += ('(unused) ' if unused else '') + \
-                varname + itemstostr(items)
+            outputstr += ('(unused) ' if line[0:2] == '//' else '') + \
+                fp.readline().strip().split(' ')[3] + itemstostr(items)
         line = fp.readline()
     pyperclip.copy(outputstr)
     print(outputstr)
