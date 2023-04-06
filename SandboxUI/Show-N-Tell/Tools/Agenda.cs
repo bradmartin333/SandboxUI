@@ -21,8 +21,9 @@
 
         private (float, (string, string)) GetPromptVal((string, string) prompt, Audio audio)
         {
-            Console.Write(prompt.Item1);
+            Console.Write("- ");
             Thread.Sleep(3000);
+            Console.Write(prompt.Item1);
             Console.Write(": ");
 
             // Add extra spaces so the audio bars start in the same place
