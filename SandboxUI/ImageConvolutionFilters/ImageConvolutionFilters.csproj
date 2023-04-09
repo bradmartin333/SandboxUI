@@ -52,7 +52,6 @@
     <Compile Include="BlurFilter.cs" />
     <Compile Include="EdgeDetectionFilter.cs" />
     <Compile Include="EmbossFilter.cs" />
-    <Compile Include="ExtBitmap.cs" />
     <Compile Include="FilterBase.cs" />
     <Compile Include="HighPassFilter.cs" />
     <Compile Include="MainForm.cs">
