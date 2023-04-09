@@ -8,7 +8,9 @@ using System.Windows.Forms;
 namespace ImageConvolutionFilters
 {
     public partial class MainForm : Form
-    {        
+    {
+        private ConvolutionFilterBase Filter = null;
+
         public MainForm()
         {
             InitializeComponent();
@@ -42,9 +44,7 @@ namespace ImageConvolutionFilters
 
             CmbFilterType.DataSource = filterList;
             CmbFilterType.DisplayMember = "FilterName";
-            CmbFilterType.SelectedIndex = 0;
-
-            ApplyFilter();
+            CmbFilterType.SelectedIndex = 9;
         }
 
         private void SelectedFilterIndexChangedEventHandler(object sender, EventArgs e) => ApplyFilter();
@@ -53,37 +53,35 @@ namespace ImageConvolutionFilters
         {
             if (PBX.BackgroundImage == null || CmbFilterType.SelectedItem == null) return;
             Bitmap src = (Bitmap)PBX.BackgroundImage;
-            ConvolutionFilterBase filter = (ConvolutionFilterBase)CmbFilterType.SelectedItem;
+            Filter = (ConvolutionFilterBase)CmbFilterType.SelectedItem;
 
-            BitmapData srcData = src.LockBits(new Rectangle(0, 0, src.Width, src.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            Rectangle rect = new Rectangle(0, 0, src.Width, src.Height);
+            BitmapData srcData = src.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
             byte[] srcBuf = new byte[srcData.Stride * srcData.Height];
             byte[] resBuf = new byte[srcData.Stride * srcData.Height];
             Marshal.Copy(srcData.Scan0, srcBuf, 0, srcBuf.Length);
             src.UnlockBits(srcData);
 
-            int filterOffset = (filter.FilterMatrix.GetLength(1) - 1) / 2;
-            for (int offsetY = filterOffset; offsetY < src.Height - filterOffset; offsetY++)
-                for (int offsetX = filterOffset; offsetX < src.Width - filterOffset; offsetX++)
+            int fo = (Filter.FilterMatrix.GetLength(1) - 1) / 2; // Filter Offset
+            for (int oy = fo; oy < src.Height - fo; oy++) // Offset Y
+                for (int ox = fo; ox < src.Width - fo; ox++) // Offset X
                 {
-                    double b = 0, g = 0, r = 0;
-                    int byteOffset = offsetY * srcData.Stride + offsetX * 4;
-                    for (int filterY = -filterOffset; filterY <= filterOffset; filterY++)
-                        for (int filterX = -filterOffset; filterX <= filterOffset; filterX++)
+                    double[] pvs = new double[3]; // Pixel Vals
+                    int bo = oy * srcData.Stride + ox * 4; // Byte Offset
+                    for (int fy = -fo; fy <= fo; fy++) // Filter Y
+                        for (int fx = -fo; fx <= fo; fx++) // Filter X
                         {
-                            int calcOffset = byteOffset + (filterX * 4) + (filterY * srcData.Stride);
-                            double filterVal = filter.FilterMatrix[filterY + filterOffset, filterX + filterOffset];
-                            b += srcBuf[calcOffset] * filterVal;
-                            g += srcBuf[calcOffset + 1] * filterVal;
-                            r += srcBuf[calcOffset + 2] * filterVal;
+                            int co = bo + (fx * 4) + (fy * srcData.Stride); // Calculated Offset
+                            double fv = Filter.FilterMatrix[fy + fo, fx + fo]; // Filter Val
+                            for (int i = 0; i < pvs.Length; i++)
+                                pvs[i] += srcBuf[co + i] * fv;
                         }
-                    resBuf[byteOffset] = Clamp(filter.Factor * b + filter.Bias);
-                    resBuf[byteOffset + 1] = Clamp(filter.Factor * g + filter.Bias);
-                    resBuf[byteOffset + 2] = Clamp(filter.Factor * r + filter.Bias);
-                    resBuf[byteOffset + 3] = 255;
+                    for (int i = 0; i < pvs.Length + 1; i++)
+                        resBuf[bo + i] = i == pvs.Length ? byte.MaxValue : Clamp(pvs[i]);
                 }
 
             Bitmap resBmp = new Bitmap(src.Width, src.Height);
-            BitmapData resData = resBmp.LockBits(new Rectangle(0, 0, resBmp.Width, resBmp.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            BitmapData resData = resBmp.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
             Marshal.Copy(resBuf, 0, resData.Scan0, resBuf.Length);
             resBmp.UnlockBits(resData);
 
@@ -94,7 +92,7 @@ namespace ImageConvolutionFilters
         {
             if (i < min) i = min;
             else if (i > max) i = max;
-            return (byte)i;
+            return (byte)(Filter.Factor * i + Filter.Bias);
         }
     }
 }
