@@ -8,9 +8,7 @@ using System.Windows.Forms;
 namespace ImageConvolutionFilters
 {
     public partial class MainForm : Form
-    {
-        private ConvolutionFilterBase Filter = null;
-
+    {        
         public MainForm()
         {
             InitializeComponent();
@@ -44,7 +42,7 @@ namespace ImageConvolutionFilters
 
             CmbFilterType.DataSource = filterList;
             CmbFilterType.DisplayMember = "FilterName";
-            CmbFilterType.SelectedIndex = 9;
+            CmbFilterType.SelectedIndex = 1;
         }
 
         private void SelectedFilterIndexChangedEventHandler(object sender, EventArgs e) => ApplyFilter();
@@ -53,7 +51,7 @@ namespace ImageConvolutionFilters
         {
             if (PBX.BackgroundImage == null || CmbFilterType.SelectedItem == null) return;
             Bitmap src = (Bitmap)PBX.BackgroundImage;
-            Filter = (ConvolutionFilterBase)CmbFilterType.SelectedItem;
+            ConvolutionFilterBase f = (ConvolutionFilterBase)CmbFilterType.SelectedItem;
 
             Rectangle rect = new Rectangle(0, 0, src.Width, src.Height);
             BitmapData srcData = src.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
@@ -62,22 +60,22 @@ namespace ImageConvolutionFilters
             Marshal.Copy(srcData.Scan0, srcBuf, 0, srcBuf.Length);
             src.UnlockBits(srcData);
 
-            int fo = (Filter.FilterMatrix.GetLength(1) - 1) / 2; // Filter Offset
-            for (int oy = fo; oy < src.Height - fo; oy++) // Offset Y
-                for (int ox = fo; ox < src.Width - fo; ox++) // Offset X
+            int fo = (f.FilterMatrix.GetLength(1) - 1) / 2; // Filter offset
+            for (int oy = fo; oy < src.Height - fo; oy++) // Offset y
+                for (int ox = fo; ox < src.Width - fo; ox++) // Offset x
                 {
-                    double[] pvs = new double[3]; // Pixel Vals
-                    int bo = oy * srcData.Stride + ox * 4; // Byte Offset
-                    for (int fy = -fo; fy <= fo; fy++) // Filter Y
-                        for (int fx = -fo; fx <= fo; fx++) // Filter X
+                    double[] pvs = new double[3]; // Pixel vals
+                    int bo = oy * srcData.Stride + ox * 4; // Byte offset
+                    for (int fy = -fo; fy <= fo; fy++) // Filter y
+                        for (int fx = -fo; fx <= fo; fx++) // Filter x
                         {
-                            int co = bo + (fx * 4) + (fy * srcData.Stride); // Calculated Offset
-                            double fv = Filter.FilterMatrix[fy + fo, fx + fo]; // Filter Val
-                            for (int i = 0; i < pvs.Length; i++)
-                                pvs[i] += srcBuf[co + i] * fv;
+                            int co = bo + (fx * 4) + (fy * srcData.Stride); // Calculated offset
+                            double fv = f.FilterMatrix[fy + fo, fx + fo]; // Filter val
+                            for (int pi = 0; pi < 3; pi++) // Pixel index
+                                pvs[pi] += srcBuf[co + pi] * fv;
                         }
-                    for (int i = 0; i < pvs.Length + 1; i++)
-                        resBuf[bo + i] = i == pvs.Length ? byte.MaxValue : Clamp(pvs[i]);
+                    for (int pi = 0; pi <= 3; pi++) // Pixel index
+                        resBuf[bo + pi] = pi == pvs.Length ? byte.MaxValue : Clamp(f.Factor * pvs[pi] + f.Bias);
                 }
 
             Bitmap resBmp = new Bitmap(src.Width, src.Height);
@@ -92,7 +90,7 @@ namespace ImageConvolutionFilters
         {
             if (i < min) i = min;
             else if (i > max) i = max;
-            return (byte)(Filter.Factor * i + Filter.Bias);
+            return (byte)i;
         }
     }
 }
