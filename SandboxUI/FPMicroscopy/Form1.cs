@@ -1,174 +1,324 @@
-﻿using FPMicroscopy.Properties;
-using System;
+﻿using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Numerics;
-using System.Xml.Linq;
-using System.Xml;
+using FPMicroscopy.Properties;
+using System.Diagnostics;
+using System.Linq;
 
 namespace FPMicroscopy
 {
     public partial class Form1 : Form
     {
+        public int FFTSize = 100;
+
         public Form1()
         {
             InitializeComponent();
-            Rectangle rect = new Rectangle(0, 0, 100, 100);
-            Bitmap FTbmp = PerformFT(LoadImages(), rect);
-            pictureBox1.Image = FTbmp;
-            Bitmap FTbmp2 = PerformFT(LoadImages2(), rect);
-            pictureBox2.Image = FTbmp;
-            Bitmap FTbmpDiff = new Bitmap(rect.Width, rect.Height);
-            bool isDifferent = false;
-            for (int i = 0; i < rect.Width; i++)
+            Bitmap[] imgs = LoadImages();
+            // Apply FFT to first image
+            Bitmap padded = PadSquareImage(imgs[0]);
+            Complex[][] fft = Forward(padded);
+            foreach (Bitmap img in imgs.Skip(1))
             {
-                for (int j = 0; j < rect.Height; j++)
-                {
-                    byte rDiff = (byte)Math.Abs(FTbmp.GetPixel(i, j).R - FTbmp2.GetPixel(i, j).R);
-                    byte gDiff = (byte)Math.Abs(FTbmp.GetPixel(i, j).G - FTbmp2.GetPixel(i, j).G);
-                    byte bDiff = (byte)Math.Abs(FTbmp.GetPixel(i, j).B - FTbmp2.GetPixel(i, j).B);
-                    isDifferent = rDiff > 0 || gDiff > 0 || bDiff > 0;
-                    FTbmpDiff.SetPixel(i, j, Color.FromArgb(rDiff, gDiff, bDiff));
-                }
+                padded = PadSquareImage(img);
+                Complex[][] fft_multiply = Forward(padded);
+                for (int i = 0; i < FFTSize; i++)
+                    for (int j = 0; j < FFTSize; j++)
+                    {
+                        Complex initial = fft[i][j];
+                        Complex complex = fft_multiply[i][j];
+                        fft[i][j] = initial + complex;
+                    }
             }
-            pictureBox3.Image = FTbmpDiff;
-            pictureBox4.BackColor = isDifferent ? Color.Red : Color.Green;
+            pictureBox1.Image = Inverse(fft);
         }
 
         private Bitmap[] LoadImages()
         {
-            //return new Bitmap[]
-            //{
-            //    Resources.linearblur0deg,
-            //    Resources.linearblur30deg,
-            //    Resources.linearblur60deg,
-            //    Resources.linearblur90deg,
-            //    Resources.linearblur120deg,
-            //    Resources.linearblur150deg,
-            //    Resources.linearblur180deg,
-            //    Resources.linearblur210deg,
-            //    Resources.linearblur240deg,
-            //    Resources.linearblur270deg,
-            //    Resources.linearblur300deg,
-            //    Resources.linearblur330deg,
-            //};
-
-            Bitmap a = new Bitmap(100, 100);
-            using (Graphics g = Graphics.FromImage(a))
+            return new Bitmap[]
             {
-                g.Clear(Color.White);
-                g.DrawString("A", DefaultFont, Brushes.Black, new Point(5, 5));
-            }
-            return new Bitmap[] { a };
+                Resources.linearblur0deg,
+                Resources.linearblur30deg,
+                Resources.linearblur60deg,
+                Resources.linearblur90deg,
+                Resources.linearblur120deg,
+                Resources.linearblur150deg,
+                Resources.linearblur180deg,
+                Resources.linearblur210deg,
+                Resources.linearblur240deg,
+                Resources.linearblur270deg,
+                Resources.linearblur300deg,
+                Resources.linearblur330deg,
+            };
         }
 
-        private Bitmap[] LoadImages2()
+        public Complex[][] ToComplex(Bitmap image)
         {
-            //return new Bitmap[]
-            //{
-            //    Resources.linearblur0deg,
-            //    Resources.linearblur30deg,
-            //    Resources.linearblur60deg,
-            //    Resources.linearblur90deg,
-            //    Resources.linearblur120deg,
-            //    Resources.linearblur150deg,
-            //    Resources.linearblur180deg,
-            //    Resources.linearblur210deg,
-            //    Resources.linearblur240deg,
-            //    Resources.linearblur270deg,
-            //    Resources.linearblur300deg,
-            //    Resources.linearblur330deg,
-            //};
+            int w = image.Width;
+            int h = image.Height;
 
-            Bitmap a = new Bitmap(100, 100);
-            using (Graphics g = Graphics.FromImage(a))
-            {
-                g.Clear(Color.White);
-                g.DrawString("A", DefaultFont, Brushes.Black, new Point(15, 15));
-            }
-            return new Bitmap[] { a };
-        }
+            BitmapData input_data = image.LockBits(
+                new Rectangle(0, 0, w, h),
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
 
-        private Bitmap PerformFT(Bitmap[] imgs, Rectangle rect)
-        {
-            double[,] r = new double[rect.Height, rect.Width];
-            double[,] g = new double[rect.Height, rect.Width];
-            double[,] b = new double[rect.Height, rect.Width];
-            for (int img = 0; img < imgs.Length; img++)
+            int bytes = input_data.Stride * input_data.Height;
+
+            byte[] buffer = new byte[bytes];
+            Complex[][] result = new Complex[w][];
+
+            Marshal.Copy(input_data.Scan0, buffer, 0, bytes);
+            image.UnlockBits(input_data);
+
+            int pixel_position;
+
+            for (int x = 0; x < w; x++)
             {
-                Bitmap src = imgs[img];
-                BitmapData srcData = src.LockBits(rect, ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
-                byte[] srcBuf = new byte[srcData.Stride * srcData.Height];
-                Marshal.Copy(srcData.Scan0, srcBuf, 0, srcBuf.Length);
-                src.UnlockBits(srcData);
-                for (int j = 0; j < srcBuf.Length; j += 4)
+                result[x] = new Complex[h];
+                for (int y = 0; y < h; y++)
                 {
-                    // Get x and y coordinates of the pixel
-                    int x = (j / 4) % rect.Width;
-                    int y = (j / 4) / rect.Width;
-                    r[y, x] += srcBuf[j + 2];
-                    g[y, x] += srcBuf[j + 1];
-                    b[y, x] += srcBuf[j + 0];
+                    pixel_position = y * input_data.Stride + x * 4;
+                    result[x][y] = new Complex(buffer[pixel_position], 0);
                 }
             }
-           
-            double[,] fft_r = FT2D(r, rect);
-            double[,] fft_g = FT2D(g, rect);
-            double[,] fft_b = FT2D(b, rect);
 
-            byte[] fft = new byte[rect.Width * rect.Height * 4];
-            for (int i = 0; i < rect.Width; i++)
-                for (int j = 0; j < rect.Height; j++)
+            return result;
+        }
+
+        public Complex[] Forward(Complex[] input, bool phaseShift = true)
+        {
+            Complex[] result = new Complex[input.Length];
+            float omega = (float)(-2.0 * Math.PI / input.Length);
+
+            if (input.Length == 1)
+            {
+                result[0] = input[0];
+
+                if (result[0].Magnitude == double.NaN)
                 {
-                    fft[(j * rect.Width + i) * 4 + 0] = (byte)fft_b[j, i];
-                    fft[(j * rect.Width + i) * 4 + 1] = (byte)fft_g[j, i];
-                    fft[(j * rect.Width + i) * 4 + 2] = (byte)fft_r[j, i];
-                    fft[(j * rect.Width + i) * 4 + 3] = 255;
+                    return new[] { new Complex(0, 0) };
                 }
+                return result;
+            }
 
-            Bitmap dst = new Bitmap(rect.Width, rect.Height, PixelFormat.Format32bppArgb);
-            BitmapData dstData = dst.LockBits(rect, ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            Marshal.Copy(fft, 0, dstData.Scan0, fft.Length);
-            dst.UnlockBits(dstData);
-            return dst;
+            var evenInput = new Complex[input.Length / 2];
+            var oddInput = new Complex[input.Length / 2];
+
+            for (int i = 0; i < input.Length / 2; i++)
+            {
+                evenInput[i] = input[2 * i];
+                oddInput[i] = input[2 * i + 1];
+            }
+
+            var even = Forward(evenInput, phaseShift);
+            var odd = Forward(oddInput, phaseShift);
+
+            for (int k = 0; k < input.Length / 2; k++)
+            {
+                int phase;
+
+                if (phaseShift)
+                {
+                    phase = k - FFTSize / 2;
+                }
+                else
+                {
+                    phase = k;
+                }
+                odd[k] *= Complex.FromPolarCoordinates(1, omega * phase);
+            }
+
+            for (int k = 0; k < input.Length / 2; k++)
+            {
+                result[k] = even[k] + odd[k];
+                result[k + input.Length / 2] = even[k] - odd[k];
+            }
+
+            return result;
         }
 
-        private double[,] FT2D(double[,] P, Rectangle rect)
+        public Complex[][] Forward(Bitmap image)
         {
-            int n = P.Length;
-            if (n == 1) return P;
-            double[,] FTreal = new double[rect.Height, rect.Width];
-            double[,] FTimaginary = new double[rect.Height, rect.Width];
-            double[,] FTamplitude = new double[rect.Height, rect.Width];
-            for (int xOut = 0; xOut < rect.Width; xOut++)
-                for (int yOut = 0; yOut < rect.Height; yOut++)
-                    for (int xSrc = 0; xSrc < rect.Width; xSrc++)
-                        for (int ySrc = 0; ySrc < rect.Height; ySrc++)
-                        {
-                            FTreal[yOut, xOut] += P[ySrc, xSrc] * Math.Cos(2 * Math.PI * ((1.0 * xOut * xSrc / rect.Width) + (1.0 * yOut * ySrc / rect.Height))) / Math.Sqrt(rect.Width * rect.Height);
-                            FTimaginary[yOut, xOut] += P[ySrc, xSrc] * Math.Sin(2 * Math.PI * ((1.0 * xOut * xSrc / rect.Width) + (1.0 * yOut * ySrc / rect.Height))) / Math.Sqrt(rect.Width * rect.Height);
-                            FTamplitude[yOut, xOut] += Math.Sqrt(Math.Pow(FTreal[yOut, xOut], 2) + Math.Pow(FTimaginary[yOut, xOut], 2));
-                        }
-            return NormalizeFT(FTamplitude, rect);
+            var p = new Complex[FFTSize][];
+            var f = new Complex[FFTSize][];
+            var t = new Complex[FFTSize][];
+
+            var complexImage = ToComplex(image);
+
+            for (int l = 0; l < FFTSize; l++)
+            {
+                p[l] = Forward(complexImage[l]);
+            }
+
+            for (int l = 0; l < FFTSize; l++)
+            {
+                t[l] = new Complex[FFTSize];
+                for (int k = 0; k < FFTSize; k++)
+                {
+                    t[l][k] = p[k][l];
+                }
+                f[l] = Forward(t[l]);
+            }
+
+            // Only keep the horizontal and vertical frequencies
+            for (int l = 0; l < FFTSize; l++)
+            {
+                for (int k = 0; k < FFTSize; k++)
+                {
+                    if (Math.Abs(l - FFTSize / 2) < FFTSize / 10 || Math.Abs(k - FFTSize / 2) < FFTSize / 10)
+                    {
+                        f[l][k] = new Complex(0, 0);
+                    }
+                }
+            }
+
+            return f;
         }
 
-        private double[,] NormalizeFT(double[,] FT, Rectangle rect)
+        public Bitmap PadSquareImage(Bitmap image)
         {
+            int w = image.Width;
+            int h = image.Height;
+            int n = 0;
+            while (FFTSize <= Math.Max(w, h))
+            {
+                FFTSize = (int)Math.Pow(2, n);
+                if (FFTSize == Math.Max(w, h))
+                {
+                    break;
+                }
+                n++;
+            }
+            double horizontal_padding = FFTSize - w;
+            double vertical_padding = FFTSize - h;
+            int left_padding = (int)Math.Floor(horizontal_padding / 2);
+            int top_padding = (int)Math.Floor(vertical_padding / 2);
+
+            BitmapData image_data = image.LockBits(
+                new Rectangle(0, 0, w, h),
+                ImageLockMode.ReadOnly,
+                PixelFormat.Format32bppArgb);
+
+            int bytes = image_data.Stride * image_data.Height;
+            byte[] buffer = new byte[bytes];
+            Marshal.Copy(image_data.Scan0, buffer, 0, bytes);
+            image.UnlockBits(image_data);
+
+            Bitmap padded_image = new Bitmap(FFTSize, FFTSize);
+
+            BitmapData padded_data = padded_image.LockBits(
+                new Rectangle(0, 0, FFTSize, FFTSize),
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb);
+
+            int padded_bytes = padded_data.Stride * padded_data.Height;
+            byte[] result = new byte[padded_bytes];
+
+            for (int i = 3; i < padded_bytes; i += 4)
+            {
+                result[i] = 255;
+            }
+
+            for (int y = 0; y < h; y++)
+            {
+                for (int x = 0; x < w; x++)
+                {
+                    int image_position = y * image_data.Stride + x * 4;
+                    int padding_position = y * padded_data.Stride + x * 4;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        result[padded_data.Stride * top_padding + 4 * left_padding + padding_position + i] = buffer[image_position + i];
+                    }
+                }
+            }
+
+            Marshal.Copy(result, 0, padded_data.Scan0, padded_bytes);
+            padded_image.UnlockBits(padded_data);
+
+            return padded_image;
+        }
+
+        public Complex[] Inverse(Complex[] input)
+        {
+            for (int i = 0; i < input.Length; i++)
+            {
+                input[i] = Complex.Conjugate(input[i]);
+            }
+
+            var transform = Forward(input, false);
+
+            for (int i = 0; i < input.Length; i++)
+            {
+                transform[i] = Complex.Conjugate(transform[i]);
+            }
+
+            return transform;
+        }
+
+        public Bitmap Inverse(Complex[][] frequencies)
+        {
+            var p = new Complex[FFTSize][];
+            var f = new Complex[FFTSize][];
+            var t = new Complex[FFTSize][];
+
+            Bitmap image = new Bitmap(FFTSize, FFTSize);
+            BitmapData image_data = image.LockBits(
+                new Rectangle(0, 0, FFTSize, FFTSize),
+                ImageLockMode.WriteOnly,
+                PixelFormat.Format32bppArgb);
+            int bytes = image_data.Stride * image_data.Height;
+            byte[] result = new byte[bytes];
+
+            for (int i = 0; i < FFTSize; i++)
+            {
+                p[i] = Inverse(frequencies[i]);
+            }
+
+            for (int i = 0; i < FFTSize; i++)
+            {
+                t[i] = new Complex[FFTSize];
+                for (int j = 0; j < FFTSize; j++)
+                {
+                    t[i][j] = p[j][i] / (FFTSize * FFTSize);
+                }
+                f[i] = Inverse(t[i]);
+            }
+
             double max = 0;
-            for (int i = 0; i < rect.Width; i++)
-                for (int j = 0; j < rect.Height; j++)
+
+            for (int y = 0; y < FFTSize; y++)
+            {
+                for (int x = 0; x < FFTSize; x++)
                 {
-                    FT[j, i] = Math.Log(FT[j, i]);
-                    if (FT[j, i] == double.NaN) FT[j, i] = 0;
-                    else if (FT[j, i] > max) max = FT[j, i];
+                    double mag = f[x][y].Magnitude;
+                    if (mag > max)
+                    {
+                        max = mag;
+                    }
                 }
-            for (int i = 0; i < rect.Width; i++)
-                for (int j = 0; j < rect.Height; j++)
-                    FT[j, i] = FT[j, i] / max * 255;
-            return FT;
+            }
+            Debug.WriteLine(max);
+            for (int y = 0; y < FFTSize; y++)
+            {
+                for (int x = 0; x < FFTSize; x++)
+                {
+                    int pixel_position = y * image_data.Stride + x * 4;
+                    for (int i = 0; i < 3; i++)
+                    {
+                        double mag = f[x][y].Magnitude;
+                        result[pixel_position + i] = (byte)(mag / max * 255);
+                        //Debug.WriteLine(result[pixel_position + i]);
+                    }
+                    result[pixel_position + 3] = 255;
+                }
+            }
+
+            Marshal.Copy(result, 0, image_data.Scan0, bytes);
+            image.UnlockBits(image_data);
+            return image;
         }
     }
 }
