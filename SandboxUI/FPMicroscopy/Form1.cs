@@ -5,7 +5,6 @@ using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Numerics;
 using FPMicroscopy.Properties;
-using System.Diagnostics;
 using System.Linq;
 
 namespace FPMicroscopy
@@ -18,22 +17,33 @@ namespace FPMicroscopy
         {
             InitializeComponent();
             Bitmap[] imgs = LoadImages();
-            // Apply FFT to first image
-            Bitmap padded = PadSquareImage(imgs[0]);
-            Complex[][] fft = Forward(padded);
-            foreach (Bitmap img in imgs.Skip(1))
+            Bitmap[] paddedImgs = imgs.Select(x => PadSquareImage(x)).ToArray();
+            Bitmap[] channels = new Bitmap[3];
+            for (int ch = 0; ch < 3; ch++)
             {
-                padded = PadSquareImage(img);
-                Complex[][] thisFFT = Forward(padded);
-                for (int i = 0; i < FFTSize; i++)
-                    for (int j = 0; j < FFTSize; j++)
-                    {
-                        Complex initial = fft[i][j];
-                        Complex thisComplex = thisFFT[i][j];
-                        fft[i][j] = initial + thisComplex;
-                    }
+                Complex[][] fft = Forward(paddedImgs[0], ch); // Apply FFT to first image
+                foreach (Bitmap padded in paddedImgs.Skip(1))
+                {
+                    Complex[][] thisFFT = Forward(padded, ch);
+                    for (int i = 0; i < FFTSize; i++)
+                        for (int j = 0; j < FFTSize; j++)
+                        {
+                            Complex initial = fft[i][j];
+                            Complex thisComplex = thisFFT[i][j];
+                            fft[i][j] = initial + thisComplex;
+                        }
+                }
+                channels[ch] = Inverse(fft);
             }
-            pictureBox1.Image = Inverse(fft);
+            Bitmap result = new Bitmap(FFTSize, FFTSize);
+            for (int i = 0; i < FFTSize; i++)
+            {
+                for (int j = 0; j < FFTSize; j++)
+                {
+                    result.SetPixel(i, j, Color.FromArgb(channels[2].GetPixel(i, j).R, channels[1].GetPixel(i, j).R, channels[0].GetPixel(i, j).R));
+                }
+            }
+            pictureBox1.Image = result;
         }
 
         private Bitmap[] LoadImages()
@@ -100,7 +110,7 @@ namespace FPMicroscopy
             return paddedImage;
         }
 
-        public Complex[][] ToComplex(Bitmap image)
+        public Complex[][] ToComplex(Bitmap image, int channel)
         {
             int w = image.Width;
             int h = image.Height;
@@ -118,7 +128,7 @@ namespace FPMicroscopy
                 result[x] = new Complex[h];
                 for (int y = 0; y < h; y++)
                 {
-                    pixelPosition = y * inputData.Stride + x * 4 + 1;
+                    pixelPosition = y * inputData.Stride + x * 4 + channel;
                     result[x][y] = new Complex(buffer[pixelPosition], 0);
                 }
             }
@@ -126,13 +136,13 @@ namespace FPMicroscopy
             return result;
         }
 
-        public Complex[][] Forward(Bitmap image)
+        public Complex[][] Forward(Bitmap image, int channel)
         {
             Complex[][] p = new Complex[FFTSize][];
             Complex[][] f = new Complex[FFTSize][];
             Complex[][] t = new Complex[FFTSize][];
 
-            Complex[][] complexImage = ToComplex(image);
+            Complex[][] complexImage = ToComplex(image, channel);
             for (int l = 0; l < FFTSize; l++)
                 p[l] = Forward(complexImage[l]);
             for (int l = 0; l < FFTSize; l++)
@@ -209,7 +219,6 @@ namespace FPMicroscopy
             }
 
             double max = 0;
-
             for (int y = 0; y < FFTSize; y++)
             {
                 for (int x = 0; x < FFTSize; x++)
