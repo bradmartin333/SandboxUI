@@ -18,13 +18,18 @@ namespace FPMicroscopy
             InitializeComponent();
             Bitmap[] imgs = LoadImages();
             Bitmap[] paddedImgs = imgs.Select(x => PadSquareImage(x)).ToArray();
-            Bitmap[] channels = new Bitmap[3];
-            for (int ch = 0; ch < 3; ch++)
+
+            Bitmap resultBmp = new Bitmap(FFTSize, FFTSize);
+            BitmapData resultData = resultBmp.LockBits(new Rectangle(0, 0, FFTSize, FFTSize), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+            int resultBytes = resultData.Stride * resultData.Height;
+            byte[] result = Enumerable.Repeat(byte.MaxValue, resultBytes).ToArray();
+
+            for (int channel = 0; channel < 3; channel++)
             {
-                Complex[][] fft = Forward(paddedImgs[0], ch); // Apply FFT to first image
+                Complex[][] fft = Forward(paddedImgs[0], channel); // Apply FFT to first image
                 foreach (Bitmap padded in paddedImgs.Skip(1))
                 {
-                    Complex[][] thisFFT = Forward(padded, ch);
+                    Complex[][] thisFFT = Forward(padded, channel);
                     for (int i = 0; i < FFTSize; i++)
                         for (int j = 0; j < FFTSize; j++)
                         {
@@ -33,17 +38,12 @@ namespace FPMicroscopy
                             fft[i][j] = initial + thisComplex;
                         }
                 }
-                channels[ch] = Inverse(fft);
+                Inverse(fft, ref result, resultData.Stride, channel);
             }
-            Bitmap result = new Bitmap(FFTSize, FFTSize);
-            for (int i = 0; i < FFTSize; i++)
-            {
-                for (int j = 0; j < FFTSize; j++)
-                {
-                    result.SetPixel(i, j, Color.FromArgb(channels[2].GetPixel(i, j).R, channels[1].GetPixel(i, j).R, channels[0].GetPixel(i, j).R));
-                }
-            }
-            pictureBox1.Image = result;
+
+            Marshal.Copy(result, 0, resultData.Scan0, resultBytes);
+            resultBmp.UnlockBits(resultData);
+            pictureBox1.Image = resultBmp;
         }
 
         private Bitmap[] LoadImages()
@@ -196,16 +196,11 @@ namespace FPMicroscopy
             return result;
         }
 
-        public Bitmap Inverse(Complex[][] frequencies)
+        public void Inverse(Complex[][] frequencies, ref byte[] result, int stride, int channel)
         {
             var p = new Complex[FFTSize][];
             var f = new Complex[FFTSize][];
             var t = new Complex[FFTSize][];
-
-            Bitmap image = new Bitmap(FFTSize, FFTSize);
-            BitmapData imageData = image.LockBits(new Rectangle(0, 0, FFTSize, FFTSize), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
-            int bytes = imageData.Stride * imageData.Height;
-            byte[] result = new byte[bytes];
 
             for (int i = 0; i < FFTSize; i++)
                 p[i] = Inverse(frequencies[i]);
@@ -232,19 +227,11 @@ namespace FPMicroscopy
             {
                 for (int x = 0; x < FFTSize; x++)
                 {
-                    int pixel_position = y * imageData.Stride + x * 4;
-                    for (int i = 0; i < 3; i++)
-                    {
-                        double mag = f[x][y].Magnitude;
-                        result[pixel_position + i] = (byte)(mag / max * 255);
-                    }
-                    result[pixel_position + 3] = 255;
+                    int pixel_position = y * stride + x * 4 + channel;
+                    double mag = f[x][y].Magnitude;
+                    result[pixel_position] = (byte)(mag / max * 255);
                 }
             }
-
-            Marshal.Copy(result, 0, imageData.Scan0, bytes);
-            image.UnlockBits(imageData);
-            return image;
         }
 
         public Complex[] Inverse(Complex[] input)
