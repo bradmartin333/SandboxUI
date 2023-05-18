@@ -21,40 +21,48 @@ namespace ArasAPI
             Console.WriteLine("Welcome to the Aras API test program");
             string[] pcbParts = GetAllPCBParts();
 
-            // Ask user for keywords and make a list of them
-            Console.WriteLine("Enter keywords to search for. Press enter to finish.");
-            List<string> keywords = new List<string>();
             while (true)
             {
-                Console.Write("Keyword: ");
-                string keyword = Console.ReadLine();
-                if (string.IsNullOrEmpty(keyword)) break;
-                keywords.Add(keyword);
+                // Ask user for keywords and make a list of them
+                Console.WriteLine("Enter keywords to search for. Press enter to finish.");
+                List<string> keywords = new List<string>();
+                while (true)
+                {
+                    Console.Write("Keyword: ");
+                    string keyword = Console.ReadLine();
+                    if (string.IsNullOrEmpty(keyword)) break;
+                    keywords.Add(keyword);
+                }
+
+                // Search for parts with the keywords
+                List<string> matches = new List<string>();
+                foreach (string partName in pcbParts)
+                {
+                    string name = partName.ToLower();
+                    // See if the name contains all the keywords
+                    bool containsAll = true;
+                    foreach (string keyword in keywords)
+                        if (!name.Contains(keyword.ToLower()))
+                        {
+                            containsAll = false;
+                            break;
+                        }
+                    if (containsAll) matches.Add(partName);
+                }
+
+                // Print out the results
+                Console.WriteLine();
+                Console.WriteLine("Found parts:");
+                foreach (string match in matches)
+                    Console.WriteLine(match);
+
+                // Ask user if they want to search again
+                Console.WriteLine();
+                Console.WriteLine("Search again? (y/n)");
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.KeyChar != 'y') break;
+                Console.WriteLine("\n");
             }
-
-            // Search for parts with the keywords
-            List<string> matches = new List<string>();
-            foreach (string partName in pcbParts)
-            {
-                string name = partName.ToLower();
-                // See if the name contains all the keywords
-                bool containsAll = true;
-                foreach (string keyword in keywords)
-                    if (!name.Contains(keyword.ToLower()))
-                    {
-                        containsAll = false;
-                        break;
-                    }
-                if (containsAll) matches.Add(partName);
-            }
-
-            // Print out the results
-            Console.WriteLine();
-            Console.WriteLine("Found parts:");
-            foreach (string match in matches)
-                Console.WriteLine(match);
-
-            Console.ReadKey();
         }
 
         private static string[] GetAllPCBParts()
