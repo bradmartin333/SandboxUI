@@ -20,6 +20,39 @@ namespace ArasAPI
             string database = Connection.GetDatabases().First();
             Connection.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
 
+            
+        }
+
+        private static FoundPart PartFromID(string id)
+        {
+            IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
+            return new FoundPart(initialPartInfo);
+        }
+
+        private static string[] PCBPartFromKey(string key)
+        {
+            int numPartsToSearch = 2000;
+            List<string> partNames = new List<string>();
+            Console.WriteLine("Getting part names...");
+            for (int i = 0; i < numPartsToSearch; i++)
+            {
+                string padded = i.ToString();
+                while (padded.Length < 4) padded = "0" + padded;
+                var result = Connection.Apply($@"<Item type='Part' action='get' select='name'>
+                                                  <item_number>305-{padded}</item_number>
+                                               </Item>");
+                if (result.ItemMax() == 0) continue;
+                string name = result.Items().First().Property("name").Value;
+                if (string.IsNullOrEmpty(name)) continue;
+                partNames.AddRange(result.Items().Select(x => x.Property("name").Value));
+                Console.Write(".");
+            }
+            Console.WriteLine();
+            return partNames.ToArray();
+        }
+
+        private static void MakeWhereUsedChart()
+        {
             // Prompt user for initial ID
             // string initialID = "2BE9E92A012F4803AD1933D1D8C101B6";
             Console.WriteLine("Enter part ID");
@@ -28,11 +61,11 @@ namespace ArasAPI
 
             // Recursively find parents and add them to the list as new parts
             List<FoundPart> foundParts = new List<FoundPart>() { PartFromID(initialID) };
-            while(true)
+            while (true)
             {
                 List<FoundPart> iterParts = foundParts.Where(x => !x.Complete).ToList();
                 if (iterParts.Count == 0) break; // Every part and its parent has been checked
-                foreach(FoundPart part in iterParts)
+                foreach (FoundPart part in iterParts)
                 {
                     IReadOnlyElement[] whereUsed = Connection.Apply($@"<Item type='Part' id='{part.ID}' action='getItemWhereUsed'/>")
                                                        .Items().First().Elements().ToArray();
@@ -75,12 +108,6 @@ namespace ArasAPI
             System.IO.File.WriteAllText("index.html", html.Replace("###GRAPH###", graph));
             Console.WriteLine("Opening graph...");
             System.Diagnostics.Process.Start("index.html");
-        }
-
-        internal static FoundPart PartFromID(string id)
-        {
-            IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
-            return new FoundPart(initialPartInfo);
         }
 
         private static int Clamp(int val, int min, int max)
