@@ -1,6 +1,7 @@
 ﻿using Innovator.Client;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 
 namespace ArasAPI
@@ -11,43 +12,90 @@ namespace ArasAPI
 
         static void Main(string[] args)
         {
-            // Welcome
-            Console.WriteLine("This is a program to test the Aras API");
-            Console.WriteLine("Here a where-used tree is generated from a part ID\n");
-
             // Connect to Parata's Aras database with credentials
             Connection = Factory.GetConnection("http://ps-aras/InnovatorServer/Server/", "BMartin");
             string database = Connection.GetDatabases().First();
             Connection.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
 
-            
+            // Welcome user and state that parts are loading
+            Console.WriteLine("Welcome to the Aras API test program");
+            string[] pcbParts = GetAllPCBParts();
+
+            // Ask user for keywords and make a list of them
+            Console.WriteLine("Enter keywords to search for. Press enter to finish.");
+            List<string> keywords = new List<string>();
+            while (true)
+            {
+                Console.Write("Keyword: ");
+                string keyword = Console.ReadLine();
+                if (string.IsNullOrEmpty(keyword)) break;
+                keywords.Add(keyword);
+            }
+
+            // Search for parts with the keywords
+            List<string> matches = new List<string>();
+            foreach (string partName in pcbParts)
+            {
+                string name = partName.ToLower();
+                // See if the name contains all the keywords
+                bool containsAll = true;
+                foreach (string keyword in keywords)
+                    if (!name.Contains(keyword.ToLower()))
+                    {
+                        containsAll = false;
+                        break;
+                    }
+                if (containsAll) matches.Add(partName);
+            }
+
+            // Print out the results
+            Console.WriteLine();
+            Console.WriteLine("Found parts:");
+            foreach (string match in matches)
+                Console.WriteLine(match);
+
+            Console.ReadKey();
         }
 
-        private static FoundPart PartFromID(string id)
+        private static string[] GetAllPCBParts()
         {
-            IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
-            return new FoundPart(initialPartInfo);
-        }
+            // Get a .txt file in the temp directory
+            string tempPath = Path.Combine(Path.GetTempPath() + "305parts.txt");
 
-        private static string[] PCBPartFromKey(string key)
-        {
+            // If the file exists, ask the user if they want to use it
+            if (File.Exists(tempPath))
+            {
+                Console.WriteLine("Found a file with 305 parts. Use it? (y/n)");
+                ConsoleKeyInfo key = Console.ReadKey();
+                if (key.KeyChar == 'y')
+                {
+                    Console.WriteLine();
+                    return File.ReadAllLines(tempPath);
+                }
+            }
+
+            Console.WriteLine("Loading 305* parts up to 305-2*: ");
             int numPartsToSearch = 2000;
             List<string> partNames = new List<string>();
-            Console.WriteLine("Getting part names...");
             for (int i = 0; i < numPartsToSearch; i++)
             {
                 string padded = i.ToString();
                 while (padded.Length < 4) padded = "0" + padded;
-                var result = Connection.Apply($@"<Item type='Part' action='get' select='name'>
+                var result = Connection.Apply($@"<Item type='Part' action='get' select='item_number, name'>
                                                   <item_number>305-{padded}</item_number>
                                                </Item>");
                 if (result.ItemMax() == 0) continue;
                 string name = result.Items().First().Property("name").Value;
                 if (string.IsNullOrEmpty(name)) continue;
-                partNames.AddRange(result.Items().Select(x => x.Property("name").Value));
-                Console.Write(".");
+                partNames.AddRange(result.Items().Select(x => $"{x.Property("item_number").Value}\t{x.Property("name").Value}"));
+                Console.SetCursorPosition(33, 1);
+                Console.Write(i.ToString());
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
+
+            // Overwrite the file with the new parts
+            File.WriteAllLines(tempPath, partNames);
+
             return partNames.ToArray();
         }
 
@@ -108,6 +156,12 @@ namespace ArasAPI
             System.IO.File.WriteAllText("index.html", html.Replace("###GRAPH###", graph));
             Console.WriteLine("Opening graph...");
             System.Diagnostics.Process.Start("index.html");
+        }
+
+        private static FoundPart PartFromID(string id)
+        {
+            IReadOnlyItem initialPartInfo = Connection.Apply($@"<Item type='Part' action='get' id='{id}'/>").Items().First();
+            return new FoundPart(initialPartInfo);
         }
 
         private static int Clamp(int val, int min, int max)
