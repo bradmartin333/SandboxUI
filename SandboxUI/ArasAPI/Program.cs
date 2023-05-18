@@ -25,6 +25,7 @@ namespace ArasAPI
             {
                 // Ask user for keywords and make a list of them
                 Console.WriteLine("Enter keywords to search for. Press enter to finish.");
+                Console.WriteLine("Use the shortest possible keywords to get the best results");
                 List<string> keywords = new List<string>();
                 while (true)
                 {
