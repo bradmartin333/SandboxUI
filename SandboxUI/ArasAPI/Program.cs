@@ -19,6 +19,23 @@ namespace ArasAPI
 
             // Welcome user and state that parts are loading
             Console.WriteLine("Welcome to the Aras API test program");
+
+
+            IReadOnlyResult cadItem = Connection.Apply(new Command($@"<Item type='CAD' action='get'>
+                                                                        <item_number>201-2022.SLDDRW</item_number>
+                                                                     </Item>"));
+            IReadOnlyElement cadFile = cadItem.Items().First().Element("viewable_file");
+
+            var stream = Connection.Process(new Command($"<Item type='File' action='get' id='{cadFile.Value}'/>")
+                .WithAction(CommandAction.DownloadFile));
+
+            stream.Save("C:\\Users\\bmartin\\Desktop\\test.pdf");
+
+            var a = 1;
+        }
+
+        private static void GetAllPCBPartsLoop()
+        {
             string[] pcbParts = GetAllPCBParts();
 
             while (true)
