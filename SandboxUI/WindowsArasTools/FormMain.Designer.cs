@@ -38,7 +38,7 @@
             this.BtnCADPDFs = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.CADPDFsWorker = new System.ComponentModel.BackgroundWorker();
+            this.BgwCADPDFs = new System.ComponentModel.BackgroundWorker();
             this.TabControl.SuspendLayout();
             this.TabCADPDFs.SuspendLayout();
             this.TLP.SuspendLayout();
@@ -134,6 +134,7 @@
             // 
             this.BtnCADPDFs.BackColor = System.Drawing.Color.LightGreen;
             this.BtnCADPDFs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnCADPDFs.Enabled = false;
             this.BtnCADPDFs.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.BtnCADPDFs.Location = new System.Drawing.Point(3, 386);
             this.BtnCADPDFs.Name = "BtnCADPDFs";
@@ -163,11 +164,11 @@
             this.label2.Text = "Coming Soon";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // CADPDFsWorker
+            // BgwCADPDFs
             // 
-            this.CADPDFsWorker.WorkerReportsProgress = true;
-            this.CADPDFsWorker.WorkerSupportsCancellation = true;
-            this.CADPDFsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CADPDFsWorker_DoWork);
+            this.BgwCADPDFs.WorkerReportsProgress = true;
+            this.BgwCADPDFs.WorkerSupportsCancellation = true;
+            this.BgwCADPDFs.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CADPDFsWorker_DoWork);
             // 
             // FormMain
             // 
@@ -199,7 +200,7 @@
         private System.Windows.Forms.Button BtnCADPDFs;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.ComponentModel.BackgroundWorker CADPDFsWorker;
+        private System.ComponentModel.BackgroundWorker BgwCADPDFs;
     }
 }
 
