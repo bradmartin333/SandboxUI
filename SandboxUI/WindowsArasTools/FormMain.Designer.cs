@@ -38,6 +38,7 @@
             this.BtnCADPDFs = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.CADPDFsWorker = new System.ComponentModel.BackgroundWorker();
             this.TabControl.SuspendLayout();
             this.TabCADPDFs.SuspendLayout();
             this.TLP.SuspendLayout();
@@ -126,8 +127,8 @@
             this.RtbCADPDFs.Name = "RtbCADPDFs";
             this.RtbCADPDFs.Size = new System.Drawing.Size(774, 377);
             this.RtbCADPDFs.TabIndex = 0;
-            this.RtbCADPDFs.Text = "Replace this text with a list of Aras part numbers that have an associated CAD PD" +
-    "F that you would like to download.";
+            this.RtbCADPDFs.Text = "Replace this text with a list of Aras part numbers (Separated by new line) that h" +
+    "ave an associated CAD PDF that you would like to download.";
             // 
             // BtnCADPDFs
             // 
@@ -162,6 +163,12 @@
             this.label2.Text = "Coming Soon";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // CADPDFsWorker
+            // 
+            this.CADPDFsWorker.WorkerReportsProgress = true;
+            this.CADPDFsWorker.WorkerSupportsCancellation = true;
+            this.CADPDFsWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CADPDFsWorker_DoWork);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -192,6 +199,7 @@
         private System.Windows.Forms.Button BtnCADPDFs;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.ComponentModel.BackgroundWorker CADPDFsWorker;
     }
 }
 
