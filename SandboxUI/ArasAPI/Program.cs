@@ -8,32 +8,6 @@ namespace ArasAPI
 {
     internal class Program
     {
-        private static IRemoteConnection Connection;
-
-        static void Main(string[] args)
-        {
-            // Connect to Parata's Aras database with credentials
-            Connection = Factory.GetConnection("http://ps-aras/InnovatorServer/Server/", "BMartin");
-            string database = Connection.GetDatabases().First();
-            Connection.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
-
-            // Welcome user and state that parts are loading
-            Console.WriteLine("Welcome to the Aras API test program");
-
-
-            IReadOnlyResult cadItem = Connection.Apply(new Command($@"<Item type='CAD' action='get'>
-                                                                        <item_number>201-2022.SLDDRW</item_number>
-                                                                     </Item>"));
-            IReadOnlyElement cadFile = cadItem.Items().First().Element("viewable_file");
-
-            var stream = Connection.Process(new Command($"<Item type='File' action='get' id='{cadFile.Value}'/>")
-                .WithAction(CommandAction.DownloadFile));
-
-            stream.Save("C:\\Users\\bmartin\\Desktop\\test.pdf");
-
-            var a = 1;
-        }
-
         private static void GetAllPCBPartsLoop()
         {
             string[] pcbParts = GetAllPCBParts();
