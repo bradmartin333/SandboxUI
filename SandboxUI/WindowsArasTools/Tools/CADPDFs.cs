@@ -52,7 +52,7 @@ namespace WindowsArasTools.Tools
                     e.Cancel = true;
                     return;
                 }
-                if (DownloadPDF(PartNumbers[i]))
+                if (DownloadAllFiles(PartNumbers[i]))
                     BGW.ReportProgress(PartNumbersIndex[i]);
             }
         }
@@ -107,17 +107,49 @@ namespace WindowsArasTools.Tools
             RTB.SelectionColor = color;
         }
 
-        private bool DownloadPDF(string partNumber)
+        private bool DownloadAllFiles(string partNumber)
         {
             try
             {
                 IReadOnlyResult cadItem = FormMain.Connection.Apply(new Command($@"<Item type='CAD' action='get'>
                                                                                        <item_number>{partNumber}.SLDDRW</item_number>
                                                                                    </Item>"));
-                IReadOnlyElement cadFile = cadItem.Items().First().Element("viewable_file");
-                var stream = FormMain.Connection.Process(new Command($"<Item type='File' action='get' id='{cadFile.Value}'/>").WithAction(CommandAction.DownloadFile));
-                Directory.CreateDirectory(DownloadPath);
-                stream.Save(Path.Combine(DownloadPath, $"{partNumber}_slddrw.pdf"));
+                IReadOnlyResult cadItem2 = FormMain.Connection.Apply(new Command($@"<Item type='CAD' action='get'>
+                                                                                       <item_number>{partNumber}.SLDPRT</item_number>
+                                                                                   </Item>"));
+                IReadOnlyResult cadItem3 = FormMain.Connection.Apply(new Command($@"<Item type='CAD' action='get'>
+                                                                                       <item_number>{partNumber}.SLDASM</item_number>
+                                                                                   </Item>"));
+                var allItems = cadItem.Items().Concat(cadItem2.Items()).Concat(cadItem3.Items());
+
+                bool success = false;
+                string thisDir = Path.Combine(DownloadPath, partNumber);
+                Directory.CreateDirectory(thisDir);
+
+                foreach (var item in allItems)
+                {
+                    var nativeFile = item.Element("native_file");
+                    if (nativeFile.Exists)
+                        success = DownloadFile(Path.Combine(thisDir, nativeFile.Attribute("keyed_name").ToString()), nativeFile.Value);
+                    var viewableFile = item.Element("viewable_file");
+                    if (viewableFile.Exists)
+                        success = DownloadFile(Path.Combine(thisDir, viewableFile.Attribute("keyed_name").ToString()), viewableFile.Value);
+                }
+
+                return success;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private bool DownloadFile(string path, string file)
+        {
+            try
+            {
+                var stream = FormMain.Connection.Process(new Command($"<Item type='File' action='get' id='{file}'/>").WithAction(CommandAction.DownloadFile));
+                stream.Save(path);
                 return true;
             }
             catch (Exception)
