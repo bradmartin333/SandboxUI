@@ -10,52 +10,36 @@ using System.Windows.Forms;
 
 namespace WindowsArasTools.Tools
 {
-    public class ToolCADPDFs
+    public partial class CADPDFs : UserControl
     {
         private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "CADPDFs");
         private readonly List<string> PartNumbers = new List<string>();
         private readonly List<int> PartNumbersIndex = new List<int>();
-        private readonly RichTextBox RTB;
         private readonly BackgroundWorker BGW = new BackgroundWorker
         {
             WorkerReportsProgress = true,
             WorkerSupportsCancellation = true
         };
-        private readonly Button BTN;
 
-        public ToolCADPDFs(RichTextBox rtb, Button btn)
+        public CADPDFs()
         {
-            RTB = rtb;
-            BTN = btn;
-            BTN.Click += BTN_Click;
-            BGW.DoWork += BGW_DoWork;
-            BGW.ProgressChanged += BGW_ProgressChanged;
-            BGW.RunWorkerCompleted += BGW_RunWorkerCompleted;
-        }
+            InitializeComponent();
 
-        private void BTN_Click(object sender, EventArgs e)
-        {
-            if (BGW.IsBusy)
+            // Connect to Parata's Aras database with credentials
+            try
             {
-                BGW.CancelAsync();
-                ResetUI();
+                FormMain.Connection = Factory.GetConnection("http://ps-aras/InnovatorServer/Server/", "BMartin");
+                string database = FormMain.Connection.GetDatabases().First();
+                FormMain.Connection.Login(new ExplicitCredentials(database, "bmartin", "innovator"));
+                RTB.Text += "Connected to Aras!\n\n";
+                RTB.Text += "Replace this text with a list of Aras part numbers (One per line) that have an associated CAD PDF that you would like to download.\n";
+                BGW.DoWork += BGW_DoWork;
+                BGW.ProgressChanged += BGW_ProgressChanged;
+                BGW.RunWorkerCompleted += BGW_RunWorkerCompleted;
             }
-            else
+            catch (Exception)
             {
-                // Get all the part numbers from the RTB
-                GetAllPartNumbers();
-                // Start the background worker
-                BGW.RunWorkerAsync();
-                // Change UI to show that the worker is running
-                RTB.BeginInvoke(new MethodInvoker(delegate
-                {
-                    RTB.Enabled = false;
-                }));
-                BTN.BeginInvoke(new MethodInvoker(delegate
-                {
-                    BTN.Text = "Stop";
-                    BTN.BackColor = Color.LightCoral;
-                }));
+                RTB.Text += "Failed to connect to Aras. Check your internet connection and try again.";
             }
         }
 
@@ -85,15 +69,9 @@ namespace WindowsArasTools.Tools
 
         private void ResetUI()
         {
-            RTB.BeginInvoke(new MethodInvoker(delegate
-            {
                 RTB.Enabled = true;
-            }));
-            BTN.BeginInvoke(new MethodInvoker(delegate
-            {
                 BTN.Text = "Start";
                 BTN.BackColor = Color.LightGreen;
-            }));
         }
 
         private void GetAllPartNumbers()
@@ -104,8 +82,7 @@ namespace WindowsArasTools.Tools
                 string line = RTB.Lines[i];
                 if (!string.IsNullOrEmpty(line))
                 {
-                    string cleanLine = line.Trim();
-                    MatchCollection matches = Regex.Matches(cleanLine, @"(\d{3}-\d{4})");
+                    MatchCollection matches = Regex.Matches(line, @"(\d{3}-\d{4})");
                     if (matches.Count == 0)
                         ColorizeRTBLine(i, Color.Red);
                     else
@@ -118,7 +95,6 @@ namespace WindowsArasTools.Tools
                             PartNumbers.Add(partNumber);
                             PartNumbersIndex.Add(i);
                             ColorizeRTBLine(i, Color.Black);
-                            RTB.Text = RTB.Text.Replace(cleanLine, partNumber);
                         }
                     }
                 }
@@ -127,11 +103,8 @@ namespace WindowsArasTools.Tools
 
         private void ColorizeRTBLine(int lineNumber, Color color)
         {
-            RTB.BeginInvoke(new MethodInvoker(delegate
-            {
-                RTB.Select(RTB.GetFirstCharIndexFromLine(lineNumber), RTB.Lines[lineNumber].Length);
-                RTB.SelectionColor = color;
-            }));
+            RTB.Select(RTB.GetFirstCharIndexFromLine(lineNumber), RTB.Lines[lineNumber].Length);
+            RTB.SelectionColor = color;
         }
 
         private bool DownloadPDF(string partNumber)
@@ -150,6 +123,26 @@ namespace WindowsArasTools.Tools
             catch (Exception)
             {
                 return false;
+            }
+        }
+
+        private void BTN_Click(object sender, EventArgs e)
+        {
+            if (BGW.IsBusy)
+            {
+                BGW.CancelAsync();
+                ResetUI();
+            }
+            else
+            {
+                // Get all the part numbers from the RTB
+                GetAllPartNumbers();
+                // Start the background worker
+                BGW.RunWorkerAsync();
+                // Change UI to show that the worker is running
+                RTB.Enabled = false;
+                BTN.Text = "Stop";
+                BTN.BackColor = Color.LightCoral;
             }
         }
     }
