@@ -30,28 +30,27 @@
         {
             this.TabControl = new System.Windows.Forms.TabControl();
             this.TabCADPDFs = new System.Windows.Forms.TabPage();
-            this.TLP = new System.Windows.Forms.TableLayoutPanel();
-            this.tab305parts = new System.Windows.Forms.TabPage();
-            this.tabWhereUsed = new System.Windows.Forms.TabPage();
             this.TlpCADPDFs = new System.Windows.Forms.TableLayoutPanel();
             this.RtbCADPDFs = new System.Windows.Forms.RichTextBox();
             this.BtnCADPDFs = new System.Windows.Forms.Button();
+            this.Tab305parts = new System.Windows.Forms.TabPage();
             this.label1 = new System.Windows.Forms.Label();
+            this.TabWhereUsed = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
-            this.BgwCADPDFs = new System.ComponentModel.BackgroundWorker();
+            this.TLP = new System.Windows.Forms.TableLayoutPanel();
             this.TabControl.SuspendLayout();
             this.TabCADPDFs.SuspendLayout();
-            this.TLP.SuspendLayout();
-            this.tab305parts.SuspendLayout();
-            this.tabWhereUsed.SuspendLayout();
             this.TlpCADPDFs.SuspendLayout();
+            this.Tab305parts.SuspendLayout();
+            this.TabWhereUsed.SuspendLayout();
+            this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
             // 
             this.TabControl.Controls.Add(this.TabCADPDFs);
-            this.TabControl.Controls.Add(this.tab305parts);
-            this.TabControl.Controls.Add(this.tabWhereUsed);
+            this.TabControl.Controls.Add(this.Tab305parts);
+            this.TabControl.Controls.Add(this.TabWhereUsed);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(3, 3);
             this.TabControl.Name = "TabControl";
@@ -69,41 +68,6 @@
             this.TabCADPDFs.TabIndex = 0;
             this.TabCADPDFs.Text = "CAD PDFs";
             this.TabCADPDFs.UseVisualStyleBackColor = true;
-            // 
-            // TLP
-            // 
-            this.TLP.ColumnCount = 1;
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TLP.Controls.Add(this.TabControl, 0, 0);
-            this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.TLP.Location = new System.Drawing.Point(0, 0);
-            this.TLP.Name = "TLP";
-            this.TLP.RowCount = 1;
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TLP.Size = new System.Drawing.Size(800, 450);
-            this.TLP.TabIndex = 1;
-            // 
-            // tab305parts
-            // 
-            this.tab305parts.Controls.Add(this.label1);
-            this.tab305parts.Location = new System.Drawing.Point(4, 22);
-            this.tab305parts.Name = "tab305parts";
-            this.tab305parts.Size = new System.Drawing.Size(786, 418);
-            this.tab305parts.TabIndex = 1;
-            this.tab305parts.Text = "305-* Parts";
-            this.tab305parts.UseVisualStyleBackColor = true;
-            // 
-            // tabWhereUsed
-            // 
-            this.tabWhereUsed.Controls.Add(this.label2);
-            this.tabWhereUsed.Location = new System.Drawing.Point(4, 22);
-            this.tabWhereUsed.Name = "tabWhereUsed";
-            this.tabWhereUsed.Size = new System.Drawing.Size(786, 418);
-            this.tabWhereUsed.TabIndex = 2;
-            this.tabWhereUsed.Text = "Where Used";
-            this.tabWhereUsed.UseVisualStyleBackColor = true;
             // 
             // TlpCADPDFs
             // 
@@ -142,7 +106,16 @@
             this.BtnCADPDFs.TabIndex = 1;
             this.BtnCADPDFs.Text = "Go";
             this.BtnCADPDFs.UseVisualStyleBackColor = false;
-            this.BtnCADPDFs.Click += new System.EventHandler(this.BtnCADPDFs_Click);
+            // 
+            // Tab305parts
+            // 
+            this.Tab305parts.Controls.Add(this.label1);
+            this.Tab305parts.Location = new System.Drawing.Point(4, 22);
+            this.Tab305parts.Name = "Tab305parts";
+            this.Tab305parts.Size = new System.Drawing.Size(786, 418);
+            this.Tab305parts.TabIndex = 1;
+            this.Tab305parts.Text = "305-* Parts";
+            this.Tab305parts.UseVisualStyleBackColor = true;
             // 
             // label1
             // 
@@ -154,6 +127,16 @@
             this.label1.Text = "Coming Soon";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // TabWhereUsed
+            // 
+            this.TabWhereUsed.Controls.Add(this.label2);
+            this.TabWhereUsed.Location = new System.Drawing.Point(4, 22);
+            this.TabWhereUsed.Name = "TabWhereUsed";
+            this.TabWhereUsed.Size = new System.Drawing.Size(786, 418);
+            this.TabWhereUsed.TabIndex = 2;
+            this.TabWhereUsed.Text = "Where Used";
+            this.TabWhereUsed.UseVisualStyleBackColor = true;
+            // 
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -164,11 +147,20 @@
             this.label2.Text = "Coming Soon";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // BgwCADPDFs
+            // TLP
             // 
-            this.BgwCADPDFs.WorkerReportsProgress = true;
-            this.BgwCADPDFs.WorkerSupportsCancellation = true;
-            this.BgwCADPDFs.DoWork += new System.ComponentModel.DoWorkEventHandler(this.CADPDFsWorker_DoWork);
+            this.TLP.ColumnCount = 1;
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TLP.Controls.Add(this.TabControl, 0, 0);
+            this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.TLP.Location = new System.Drawing.Point(0, 0);
+            this.TLP.Name = "TLP";
+            this.TLP.RowCount = 1;
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.TLP.Size = new System.Drawing.Size(800, 450);
+            this.TLP.TabIndex = 1;
             // 
             // FormMain
             // 
@@ -180,10 +172,10 @@
             this.Text = "Windows Aras Tools";
             this.TabControl.ResumeLayout(false);
             this.TabCADPDFs.ResumeLayout(false);
-            this.TLP.ResumeLayout(false);
-            this.tab305parts.ResumeLayout(false);
-            this.tabWhereUsed.ResumeLayout(false);
             this.TlpCADPDFs.ResumeLayout(false);
+            this.Tab305parts.ResumeLayout(false);
+            this.TabWhereUsed.ResumeLayout(false);
+            this.TLP.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -193,14 +185,13 @@
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabCADPDFs;
         private System.Windows.Forms.TableLayoutPanel TLP;
-        private System.Windows.Forms.TabPage tab305parts;
-        private System.Windows.Forms.TabPage tabWhereUsed;
+        private System.Windows.Forms.TabPage Tab305parts;
+        private System.Windows.Forms.TabPage TabWhereUsed;
         private System.Windows.Forms.TableLayoutPanel TlpCADPDFs;
         private System.Windows.Forms.RichTextBox RtbCADPDFs;
         private System.Windows.Forms.Button BtnCADPDFs;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.ComponentModel.BackgroundWorker BgwCADPDFs;
     }
 }
 
