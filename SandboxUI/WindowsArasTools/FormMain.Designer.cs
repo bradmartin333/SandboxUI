@@ -31,15 +31,12 @@
             this.TabControl = new System.Windows.Forms.TabControl();
             this.TabCADFiles = new System.Windows.Forms.TabPage();
             this.TabPartLookup = new System.Windows.Forms.TabPage();
-            this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
-            this.TabWhereUsed = new System.Windows.Forms.TabPage();
-            this.label2 = new System.Windows.Forms.Label();
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
             this.cadFiles1 = new WindowsArasTools.Tools.CADFiles();
+            this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
             this.TabControl.SuspendLayout();
             this.TabCADFiles.SuspendLayout();
             this.TabPartLookup.SuspendLayout();
-            this.TabWhereUsed.SuspendLayout();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,7 +44,6 @@
             // 
             this.TabControl.Controls.Add(this.TabCADFiles);
             this.TabControl.Controls.Add(this.TabPartLookup);
-            this.TabControl.Controls.Add(this.TabWhereUsed);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(3, 3);
             this.TabControl.Name = "TabControl";
@@ -75,35 +71,6 @@
             this.TabPartLookup.Text = "Part Lookup";
             this.TabPartLookup.UseVisualStyleBackColor = true;
             // 
-            // partLookup1
-            // 
-            this.partLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.partLookup1.Location = new System.Drawing.Point(0, 0);
-            this.partLookup1.MinimumSize = new System.Drawing.Size(550, 200);
-            this.partLookup1.Name = "partLookup1";
-            this.partLookup1.Size = new System.Drawing.Size(786, 418);
-            this.partLookup1.TabIndex = 0;
-            // 
-            // TabWhereUsed
-            // 
-            this.TabWhereUsed.Controls.Add(this.label2);
-            this.TabWhereUsed.Location = new System.Drawing.Point(4, 22);
-            this.TabWhereUsed.Name = "TabWhereUsed";
-            this.TabWhereUsed.Size = new System.Drawing.Size(786, 418);
-            this.TabWhereUsed.TabIndex = 2;
-            this.TabWhereUsed.Text = "Where Used";
-            this.TabWhereUsed.UseVisualStyleBackColor = true;
-            // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.label2.Location = new System.Drawing.Point(0, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(786, 418);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "Coming Soon";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // TLP
             // 
             this.TLP.ColumnCount = 1;
@@ -128,6 +95,15 @@
             this.cadFiles1.Size = new System.Drawing.Size(786, 418);
             this.cadFiles1.TabIndex = 0;
             // 
+            // partLookup1
+            // 
+            this.partLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.partLookup1.Location = new System.Drawing.Point(0, 0);
+            this.partLookup1.MinimumSize = new System.Drawing.Size(550, 200);
+            this.partLookup1.Name = "partLookup1";
+            this.partLookup1.Size = new System.Drawing.Size(786, 418);
+            this.partLookup1.TabIndex = 0;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -139,7 +115,6 @@
             this.TabControl.ResumeLayout(false);
             this.TabCADFiles.ResumeLayout(false);
             this.TabPartLookup.ResumeLayout(false);
-            this.TabWhereUsed.ResumeLayout(false);
             this.TLP.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -148,8 +123,6 @@
         #endregion
         private System.Windows.Forms.TableLayoutPanel TLP;
         private System.Windows.Forms.TabPage TabPartLookup;
-        private System.Windows.Forms.TabPage TabWhereUsed;
-        private System.Windows.Forms.Label label2;
         private Tools.PartLookup partLookup1;
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabCADFiles;
