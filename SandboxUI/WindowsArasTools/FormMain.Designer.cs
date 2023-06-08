@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.TabControl = new System.Windows.Forms.TabControl();
-            this.TabCADPDFs = new System.Windows.Forms.TabPage();
-            this.cadpdFs1 = new WindowsArasTools.Tools.CADPDFs();
+            this.TabCADFiles = new System.Windows.Forms.TabPage();
             this.TabPartLookup = new System.Windows.Forms.TabPage();
             this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
             this.TabWhereUsed = new System.Windows.Forms.TabPage();
             this.label2 = new System.Windows.Forms.Label();
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.cadFiles1 = new WindowsArasTools.Tools.CADFiles();
             this.TabControl.SuspendLayout();
-            this.TabCADPDFs.SuspendLayout();
+            this.TabCADFiles.SuspendLayout();
             this.TabPartLookup.SuspendLayout();
             this.TabWhereUsed.SuspendLayout();
             this.TLP.SuspendLayout();
@@ -45,7 +45,7 @@
             // 
             // TabControl
             // 
-            this.TabControl.Controls.Add(this.TabCADPDFs);
+            this.TabControl.Controls.Add(this.TabCADFiles);
             this.TabControl.Controls.Add(this.TabPartLookup);
             this.TabControl.Controls.Add(this.TabWhereUsed);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -55,25 +55,15 @@
             this.TabControl.Size = new System.Drawing.Size(794, 444);
             this.TabControl.TabIndex = 0;
             // 
-            // TabCADPDFs
+            // TabCADFiles
             // 
-            this.TabCADPDFs.Controls.Add(this.cadpdFs1);
-            this.TabCADPDFs.Location = new System.Drawing.Point(4, 22);
-            this.TabCADPDFs.Name = "TabCADPDFs";
-            this.TabCADPDFs.Padding = new System.Windows.Forms.Padding(3);
-            this.TabCADPDFs.Size = new System.Drawing.Size(786, 418);
-            this.TabCADPDFs.TabIndex = 0;
-            this.TabCADPDFs.Text = "CAD PDFs";
-            this.TabCADPDFs.UseVisualStyleBackColor = true;
-            // 
-            // cadpdFs1
-            // 
-            this.cadpdFs1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.cadpdFs1.Location = new System.Drawing.Point(3, 3);
-            this.cadpdFs1.MinimumSize = new System.Drawing.Size(140, 70);
-            this.cadpdFs1.Name = "cadpdFs1";
-            this.cadpdFs1.Size = new System.Drawing.Size(780, 412);
-            this.cadpdFs1.TabIndex = 0;
+            this.TabCADFiles.Controls.Add(this.cadFiles1);
+            this.TabCADFiles.Location = new System.Drawing.Point(4, 22);
+            this.TabCADFiles.Name = "TabCADFiles";
+            this.TabCADFiles.Size = new System.Drawing.Size(786, 418);
+            this.TabCADFiles.TabIndex = 3;
+            this.TabCADFiles.Text = "CAD Files";
+            this.TabCADFiles.UseVisualStyleBackColor = true;
             // 
             // TabPartLookup
             // 
@@ -129,6 +119,15 @@
             this.TLP.Size = new System.Drawing.Size(800, 450);
             this.TLP.TabIndex = 1;
             // 
+            // cadFiles1
+            // 
+            this.cadFiles1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cadFiles1.Location = new System.Drawing.Point(0, 0);
+            this.cadFiles1.MinimumSize = new System.Drawing.Size(140, 70);
+            this.cadFiles1.Name = "cadFiles1";
+            this.cadFiles1.Size = new System.Drawing.Size(786, 418);
+            this.cadFiles1.TabIndex = 0;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -138,7 +137,7 @@
             this.Name = "FormMain";
             this.Text = "Windows Aras Tools";
             this.TabControl.ResumeLayout(false);
-            this.TabCADPDFs.ResumeLayout(false);
+            this.TabCADFiles.ResumeLayout(false);
             this.TabPartLookup.ResumeLayout(false);
             this.TabWhereUsed.ResumeLayout(false);
             this.TLP.ResumeLayout(false);
@@ -147,14 +146,14 @@
         }
 
         #endregion
-        private System.Windows.Forms.TabPage TabCADPDFs;
         private System.Windows.Forms.TableLayoutPanel TLP;
         private System.Windows.Forms.TabPage TabPartLookup;
         private System.Windows.Forms.TabPage TabWhereUsed;
         private System.Windows.Forms.Label label2;
-        private Tools.CADPDFs cadpdFs1;
         private Tools.PartLookup partLookup1;
         private System.Windows.Forms.TabControl TabControl;
+        private System.Windows.Forms.TabPage TabCADFiles;
+        private Tools.CADFiles cadFiles1;
     }
 }
 

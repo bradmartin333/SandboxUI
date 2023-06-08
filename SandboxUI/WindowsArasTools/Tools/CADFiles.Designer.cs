@@ -1,6 +1,6 @@
 ﻿namespace WindowsArasTools.Tools
 {
-    partial class CADPDFs
+    partial class CADFiles
     {
         /// <summary> 
         /// Required designer variable.

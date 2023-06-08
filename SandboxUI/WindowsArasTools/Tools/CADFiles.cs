@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace WindowsArasTools.Tools
 {
-    public partial class CADPDFs : UserControl
+    public partial class CADFiles : UserControl
     {
-        private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "CADPDFs");
+        private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "CAD Files");
         private readonly List<string> PartNumbers = new List<string>();
         private readonly List<int> PartNumbersIndex = new List<int>();
         private readonly BackgroundWorker BGW = new BackgroundWorker
@@ -21,7 +21,7 @@ namespace WindowsArasTools.Tools
             WorkerSupportsCancellation = true
         };
 
-        public CADPDFs()
+        public CADFiles()
         {
             InitializeComponent();
 
@@ -165,7 +165,7 @@ namespace WindowsArasTools.Tools
                 BGW.CancelAsync();
                 ResetUI();
             }
-            else
+            else if (FormMain.ArasConnected)
             {
                 // Get all the part numbers from the RTB
                 GetAllPartNumbers();

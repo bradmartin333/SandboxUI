@@ -57,11 +57,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\CADPDFs.cs">
+    <Compile Include="Tools\CADFiles.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tools\CADPDFs.Designer.cs">
-      <DependentUpon>CADPDFs.cs</DependentUpon>
+    <Compile Include="Tools\CADFiles.Designer.cs">
+      <DependentUpon>CADFiles.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\PartLookup.cs">
       <SubType>UserControl</SubType>
@@ -81,8 +81,8 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="Tools\CADPDFs.resx">
-      <DependentUpon>CADPDFs.cs</DependentUpon>
+    <EmbeddedResource Include="Tools\CADFiles.resx">
+      <DependentUpon>CADFiles.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\PartLookup.resx">
       <DependentUpon>PartLookup.cs</DependentUpon>
