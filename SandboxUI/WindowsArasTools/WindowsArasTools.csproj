@@ -69,6 +69,12 @@
     <Compile Include="Tools\PartLookup.Designer.cs">
       <DependentUpon>PartLookup.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\WhereUsed.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\WhereUsed.Designer.cs">
+      <DependentUpon>WhereUsed.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -86,6 +92,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\PartLookup.resx">
       <DependentUpon>PartLookup.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\WhereUsed.resx">
+      <DependentUpon>WhereUsed.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
