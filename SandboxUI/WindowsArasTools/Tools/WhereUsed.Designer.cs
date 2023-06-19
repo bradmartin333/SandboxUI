@@ -31,7 +31,8 @@
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
             this.TxtPartNumber = new System.Windows.Forms.TextBox();
             this.BtnRun = new System.Windows.Forms.Button();
-            this.RTB = new System.Windows.Forms.RichTextBox();
+            this.WebBrowser = new System.Windows.Forms.WebBrowser();
+            this.BtnSave = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -39,18 +40,19 @@
             // 
             this.TLP.ColumnCount = 1;
             this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.TLP.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.Controls.Add(this.TxtPartNumber, 0, 0);
             this.TLP.Controls.Add(this.BtnRun, 0, 1);
-            this.TLP.Controls.Add(this.RTB, 0, 2);
+            this.TLP.Controls.Add(this.WebBrowser, 0, 2);
+            this.TLP.Controls.Add(this.BtnSave, 0, 3);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
-            this.TLP.RowCount = 3;
+            this.TLP.RowCount = 4;
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.TLP.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.TLP.Size = new System.Drawing.Size(180, 150);
             this.TLP.TabIndex = 0;
             // 
@@ -79,14 +81,28 @@
             this.BtnRun.UseVisualStyleBackColor = false;
             this.BtnRun.Click += new System.EventHandler(this.BtnRun_Click);
             // 
-            // RTB
+            // WebBrowser
             // 
-            this.RTB.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.RTB.Location = new System.Drawing.Point(3, 60);
-            this.RTB.Name = "RTB";
-            this.RTB.Size = new System.Drawing.Size(174, 87);
-            this.RTB.TabIndex = 3;
-            this.RTB.Text = "";
+            this.WebBrowser.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.WebBrowser.Location = new System.Drawing.Point(3, 60);
+            this.WebBrowser.MinimumSize = new System.Drawing.Size(20, 20);
+            this.WebBrowser.Name = "WebBrowser";
+            this.WebBrowser.Size = new System.Drawing.Size(174, 56);
+            this.WebBrowser.TabIndex = 2;
+            // 
+            // BtnSave
+            // 
+            this.BtnSave.AutoSize = true;
+            this.BtnSave.BackColor = System.Drawing.Color.White;
+            this.BtnSave.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.BtnSave.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnSave.Location = new System.Drawing.Point(3, 122);
+            this.BtnSave.Name = "BtnSave";
+            this.BtnSave.Size = new System.Drawing.Size(174, 25);
+            this.BtnSave.TabIndex = 3;
+            this.BtnSave.Text = "Save Webpage";
+            this.BtnSave.UseVisualStyleBackColor = false;
+            this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
             // WhereUsed
             // 
@@ -107,6 +123,7 @@
         private System.Windows.Forms.TableLayoutPanel TLP;
         private System.Windows.Forms.Button BtnRun;
         private System.Windows.Forms.TextBox TxtPartNumber;
-        private System.Windows.Forms.RichTextBox RTB;
+        private System.Windows.Forms.WebBrowser WebBrowser;
+        private System.Windows.Forms.Button BtnSave;
     }
 }

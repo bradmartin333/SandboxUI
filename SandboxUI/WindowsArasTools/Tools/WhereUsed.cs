@@ -2,13 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace WindowsArasTools.Tools
 {
     public partial class WhereUsed : UserControl
     {
+        private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "WhereUsed");
+        private static string QueryPartNumber = null;
+
         public WhereUsed()
         {
             InitializeComponent();
@@ -16,6 +21,8 @@ namespace WindowsArasTools.Tools
 
         private void TxtPartNumber_TextChanged(object sender, EventArgs e)
         {
+            QueryPartNumber = null;
+            WebBrowser.DocumentText = "";
             if (System.Text.RegularExpressions.Regex.IsMatch(TxtPartNumber.Text, @"^(\d{3}-\d{4})$"))
             {
                 TxtPartNumber.BackColor = Color.White;
@@ -30,20 +37,22 @@ namespace WindowsArasTools.Tools
             }
         }
 
-        private void BtnRun_Click(object sender, EventArgs e)
+        private async void BtnRun_Click(object sender, EventArgs e)
         {
+            QueryPartNumber = TxtPartNumber.Text;
             BtnRun.BackColor = Color.Gold;
-            RTB.Clear();
-            string partNumber = TxtPartNumber.Text;
-            RTB.Text = $"Searching for {partNumber}\n";
-            RTB.Text += GetAllWhereUsedQuantity(partNumber);
+            Application.DoEvents();
+            WebBrowser.DocumentText = "";
+            string result = await Task.Run(() => GetAllWhereUsedQuantity());
+            WebBrowser.DocumentText = result;
             BtnRun.BackColor = Color.LimeGreen;
         }
 
-        private static string GetAllWhereUsedQuantity(string queryPartNumber)
+        private static string GetAllWhereUsedQuantity()
         {
-            string output = "";
-            string queryID = GetPartID(queryPartNumber);
+            string output = $"<html><body>Looking for: {QueryPartNumber}<br><br>";
+            output += "<table border='1' style='text-align: center;'><tr><th>Part Number</th><th>Name</th><th>Quantity</th></tr>";
+            string queryID = GetPartID(QueryPartNumber);
             if (!string.IsNullOrEmpty(queryID))
             {
                 IReadOnlyElement[] fetchWhereUsed = FormMain.Connection.Apply($@"<Item type='Part' id='{queryID}' action='getItemWhereUsed'/>")
@@ -57,19 +66,13 @@ namespace WindowsArasTools.Tools
                     foreach (string partNumber in whereUsedParts)
                     {
                         string partID = GetPartID(partNumber);
-                        if (!string.IsNullOrEmpty(partID))
-                        {
-                            string quantity = GetBOMQuantity(partID, queryPartNumber);
-                            for (int i = 0; i < 75; i++)
-                                output += '-';
-                            output += $"\n{partNumber}";
-                            if (!string.IsNullOrEmpty(quantity))
-                                output += $"\t{quantity}";
-                            output += "\n";
-                        }
+                        string name = GetPartName(partNumber);
+                        string quantity = GetBOMQuantity(partID, QueryPartNumber);
+                        output += $"<tr><td>{partNumber}</td><td>{name}</td><td>{quantity}</td></tr>";
                     }
                 }
             }
+            output += "</table></body></html>";
             return output;
         }
 
@@ -79,6 +82,14 @@ namespace WindowsArasTools.Tools
                                                                        <item_number>{partNumber}</item_number>
                                                                    </Item>");
             return fetchID.ItemMax() == 0 ? null : fetchID.Items().First().Attribute("id").Value;
+        }
+
+        public static string GetPartName(string partNumber)
+        {
+            IReadOnlyResult fetchName = FormMain.Connection.Apply($@"<Item type='Part' action='get' select='name'>
+                                                                       <item_number>{partNumber}</item_number>
+                                                                   </Item>");
+            return fetchName.ItemMax() == 0 ? null : fetchName.Items().First().Element("name").Value;
         }
 
         public static string GetBOMQuantity(string parentID, string queryPartNumber)
@@ -96,6 +107,17 @@ namespace WindowsArasTools.Tools
                     return bom.Property("quantity").Value;
             }
             return null;
+        }
+
+        private void BtnSave_Click(object sender, EventArgs e)
+        {
+            if (!string.IsNullOrEmpty(QueryPartNumber))
+            {
+                Directory.CreateDirectory(DownloadPath);
+                string fileName = Path.Combine(DownloadPath, $"{QueryPartNumber}.html");
+                File.WriteAllText(fileName, WebBrowser.DocumentText);
+                MessageBox.Show($"File saved to: {fileName}");
+            }
         }
     }
 }
