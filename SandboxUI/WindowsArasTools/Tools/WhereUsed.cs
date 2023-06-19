@@ -1,6 +1,7 @@
 ﻿using Innovator.Client;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -13,9 +14,30 @@ namespace WindowsArasTools.Tools
             InitializeComponent();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void TxtPartNumber_TextChanged(object sender, EventArgs e)
         {
-            string info = GetAllWhereUsedQuantity("305-0059");
+            if (System.Text.RegularExpressions.Regex.IsMatch(TxtPartNumber.Text, @"^(\d{3}-\d{4})$"))
+            {
+                TxtPartNumber.BackColor = Color.White;
+                BtnRun.BackColor = Color.LimeGreen;
+                BtnRun.Enabled = true;
+            }
+            else
+            {
+                TxtPartNumber.BackColor = Color.Firebrick;
+                BtnRun.BackColor = Color.White;
+                BtnRun.Enabled = false;
+            }
+        }
+
+        private void BtnRun_Click(object sender, EventArgs e)
+        {
+            BtnRun.BackColor = Color.Gold;
+            RTB.Clear();
+            string partNumber = TxtPartNumber.Text;
+            RTB.Text = $"Searching for {partNumber}\n";
+            RTB.Text += GetAllWhereUsedQuantity(partNumber);
+            BtnRun.BackColor = Color.LimeGreen;
         }
 
         private static string GetAllWhereUsedQuantity(string queryPartNumber)
@@ -38,8 +60,12 @@ namespace WindowsArasTools.Tools
                         if (!string.IsNullOrEmpty(partID))
                         {
                             string quantity = GetBOMQuantity(partID, queryPartNumber);
+                            for (int i = 0; i < 75; i++)
+                                output += '-';
+                            output += $"\n{partNumber}";
                             if (!string.IsNullOrEmpty(quantity))
-                                output += $"{partNumber}: {quantity}\n";
+                                output += $"\t{quantity}";
+                            output += "\n";
                         }
                     }
                 }
