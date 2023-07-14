@@ -57,7 +57,7 @@ namespace WindowsArasTools.Tools
                 try
                 {
                     string name = item.Element("name").Value.Trim();
-                    if (!name.ToLower().Contains("deprecated"))
+                    if (!name.ToLower().Contains("deprecate"))
                         Parts.Add($"{item.Element("item_number").Value.Trim()}\t{item.Element("name").Value.Trim()}");
                 }
                 catch (Exception) { }
@@ -104,23 +104,31 @@ namespace WindowsArasTools.Tools
 
         private void GetResults()
         {
-            var keywords = new HashSet<string>(Keywords.Select(line => line.ToLower().Trim()));
-            StringBuilder sb = new StringBuilder();
-            Parallel.ForEach(Parts, part =>
+            try
             {
-                try
+                var keywords = new HashSet<string>(Keywords.Select(line => line.ToLower().Trim()));
+                StringBuilder sb = new StringBuilder();
+                Parallel.ForEach(Parts, part =>
                 {
-                    var name = part.ToLower();
-                    if (keywords.All(keyword => name.Contains(keyword)))
-                        if (sb.Length < sb.Capacity)
-                            sb.AppendLine(part);
-                }
-                catch (Exception) { }
-            });
-            if (sb.Length < RtbResults.MaxLength)
-                RtbResults.Text = sb.ToString();
-            else
+                    try
+                    {
+                        var name = part.ToLower();
+                        if (keywords.All(keyword => name.Contains(keyword)))
+                            if (sb.Length < sb.MaxCapacity)
+                                sb.AppendLine(part);
+                    }
+                    catch (Exception) { }
+                });
+
+                if (sb.Length < RtbResults.MaxLength)
+                    RtbResults.Text = sb.ToString();
+                else
+                    RtbResults.Text = AllFilesString;
+            }
+            catch (Exception)
+            {
                 RtbResults.Text = AllFilesString;
+            }
         }
     }
 }
