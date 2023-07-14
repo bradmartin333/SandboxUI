@@ -63,6 +63,12 @@
     <Compile Include="Tools\CADFiles.Designer.cs">
       <DependentUpon>CADFiles.cs</DependentUpon>
     </Compile>
+    <Compile Include="Tools\FileLookup.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Tools\FileLookup.Designer.cs">
+      <DependentUpon>FileLookup.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tools\PartLookup.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -89,6 +95,9 @@
     </Compile>
     <EmbeddedResource Include="Tools\CADFiles.resx">
       <DependentUpon>CADFiles.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tools\FileLookup.resx">
+      <DependentUpon>FileLookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\PartLookup.resx">
       <DependentUpon>PartLookup.cs</DependentUpon>

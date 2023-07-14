@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace WindowsArasTools.Tools
 {
-    public partial class PartLookup : UserControl
+    public partial class FileLookup : UserControl
     {
-        private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "PartLookup.txt");
+        private readonly static string DownloadPath = Path.Combine(FormMain.DownloadPath, "FileLookup.txt");
         private readonly List<string> Keywords = new List<string>();
         private List<string> Parts = new List<string>();
-        private static string AllPartsString = string.Empty;
+        private static string AllFilesString = string.Empty;
 
-        public PartLookup()
+        public FileLookup()
         {
             InitializeComponent();
             CheckForCache();
@@ -31,7 +31,7 @@ namespace WindowsArasTools.Tools
         {
             if (!FormMain.ArasConnected) return;
 
-            BtnDownloadCache.Text = "Downloading Part Cache...";
+            BtnDownloadCache.Text = "Downloading File Cache...";
             BtnDownloadCache.Enabled = false;
             RtbKeywords.Enabled = false;
             RtbResults.Clear();
@@ -51,7 +51,7 @@ namespace WindowsArasTools.Tools
 
         private void DownloadCache()
         {
-            var result = FormMain.Connection.Apply($@"<Item type='Part' action='get' select='item_number, name'><state condition='ne'>Deprecated</state></Item>");
+            var result = FormMain.Connection.Apply($@"<Item type='Document' action='get' select='item_number, name'><state condition='ne'>Deprecated</state></Item>");
             var items = result.Items();
             foreach (var item in items)
                 try
@@ -61,23 +61,23 @@ namespace WindowsArasTools.Tools
                         Parts.Add($"{item.Element("item_number").Value.Trim()}\t{item.Element("name").Value.Trim()}");
                 }
                 catch (Exception) { }
-            AllPartsString = string.Join(Environment.NewLine, Parts);
+            AllFilesString = string.Join(Environment.NewLine, Parts);
         }
 
         private void CheckForCache()
         {
             if (File.Exists(DownloadPath))
             {
-                LblFileCache.Text = $"Part Cache Found";
-                BtnDownloadCache.Text = "Re-Download Part Cache";
+                LblFileCache.Text = $"File Cache Found";
+                BtnDownloadCache.Text = "Re-Download File Cache";
                 RtbKeywords.Enabled = true;
                 Parts = File.ReadAllLines(DownloadPath).ToList();
-                AllPartsString= string.Join(Environment.NewLine, Parts);
+                AllFilesString= string.Join(Environment.NewLine, Parts);
             }
             else
             {
-                LblFileCache.Text = $"No Part Cache Found";
-                BtnDownloadCache.Text = "Download Part Cache";
+                LblFileCache.Text = $"No File Cache Found";
+                BtnDownloadCache.Text = "Download File Cache";
                 RtbKeywords.Enabled = false;
             }
             RtbResults.Clear();
@@ -99,7 +99,7 @@ namespace WindowsArasTools.Tools
             if (Keywords.Any())
                 GetResults();
             else
-                RtbResults.Text = AllPartsString;
+                RtbResults.Text = AllFilesString;
         }
 
         private void GetResults()
@@ -120,7 +120,7 @@ namespace WindowsArasTools.Tools
             if (sb.Length < RtbResults.MaxLength)
                 RtbResults.Text = sb.ToString();
             else
-                RtbResults.Text = AllPartsString;
+                RtbResults.Text = AllFilesString;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace WindowsArasTools.Tools
 {
-    partial class PartLookup
+    partial class FileLookup
     {
         /// <summary> 
         /// Required designer variable.
@@ -92,9 +92,9 @@
             this.LblFileCache.AutoSize = true;
             this.LblFileCache.Location = new System.Drawing.Point(3, 9);
             this.LblFileCache.Name = "LblFileCache";
-            this.LblFileCache.Size = new System.Drawing.Size(60, 13);
+            this.LblFileCache.Size = new System.Drawing.Size(57, 13);
             this.LblFileCache.TabIndex = 0;
-            this.LblFileCache.Text = "Part Cache";
+            this.LblFileCache.Text = "File Cache";
             // 
             // BtnDownloadCache
             // 
@@ -102,7 +102,7 @@
             this.BtnDownloadCache.AutoSize = true;
             this.BtnDownloadCache.BackColor = System.Drawing.Color.LightGray;
             this.BtnDownloadCache.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnDownloadCache.Location = new System.Drawing.Point(69, 3);
+            this.BtnDownloadCache.Location = new System.Drawing.Point(66, 3);
             this.BtnDownloadCache.Name = "BtnDownloadCache";
             this.BtnDownloadCache.Size = new System.Drawing.Size(75, 25);
             this.BtnDownloadCache.TabIndex = 1;
@@ -110,13 +110,13 @@
             this.BtnDownloadCache.UseVisualStyleBackColor = false;
             this.BtnDownloadCache.Click += new System.EventHandler(this.BtnDownloadCache_Click);
             // 
-            // PartLookup
+            // FileLookup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.TlpPartLookup);
             this.MinimumSize = new System.Drawing.Size(550, 200);
-            this.Name = "PartLookup";
+            this.Name = "FileLookup";
             this.Size = new System.Drawing.Size(550, 200);
             this.TlpPartLookup.ResumeLayout(false);
             this.TlpPartLookup.PerformLayout();

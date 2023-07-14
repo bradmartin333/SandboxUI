@@ -32,15 +32,18 @@
             this.TabCADFiles = new System.Windows.Forms.TabPage();
             this.cadFiles1 = new WindowsArasTools.Tools.CADFiles();
             this.TabPartLookup = new System.Windows.Forms.TabPage();
-            this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
-            this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.TabFileLookup = new System.Windows.Forms.TabPage();
             this.TabWhereUsed = new System.Windows.Forms.TabPage();
             this.whereUsed1 = new WindowsArasTools.Tools.WhereUsed();
+            this.TLP = new System.Windows.Forms.TableLayoutPanel();
+            this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
+            this.fileLookup1 = new WindowsArasTools.Tools.FileLookup();
             this.TabControl.SuspendLayout();
             this.TabCADFiles.SuspendLayout();
             this.TabPartLookup.SuspendLayout();
-            this.TLP.SuspendLayout();
+            this.TabFileLookup.SuspendLayout();
             this.TabWhereUsed.SuspendLayout();
+            this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
@@ -48,6 +51,7 @@
             this.TabControl.Controls.Add(this.TabCADFiles);
             this.TabControl.Controls.Add(this.TabPartLookup);
             this.TabControl.Controls.Add(this.TabWhereUsed);
+            this.TabControl.Controls.Add(this.TabFileLookup);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(3, 3);
             this.TabControl.Name = "TabControl";
@@ -76,22 +80,42 @@
             // 
             // TabPartLookup
             // 
+            this.TabPartLookup.BackColor = System.Drawing.Color.LightBlue;
             this.TabPartLookup.Controls.Add(this.partLookup1);
             this.TabPartLookup.Location = new System.Drawing.Point(4, 22);
             this.TabPartLookup.Name = "TabPartLookup";
             this.TabPartLookup.Size = new System.Drawing.Size(786, 418);
             this.TabPartLookup.TabIndex = 1;
             this.TabPartLookup.Text = "Part Lookup";
-            this.TabPartLookup.UseVisualStyleBackColor = true;
             // 
-            // partLookup1
+            // TabFileLookup
             // 
-            this.partLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.partLookup1.Location = new System.Drawing.Point(0, 0);
-            this.partLookup1.MinimumSize = new System.Drawing.Size(550, 200);
-            this.partLookup1.Name = "partLookup1";
-            this.partLookup1.Size = new System.Drawing.Size(786, 418);
-            this.partLookup1.TabIndex = 0;
+            this.TabFileLookup.BackColor = System.Drawing.Color.LightGreen;
+            this.TabFileLookup.Controls.Add(this.fileLookup1);
+            this.TabFileLookup.Location = new System.Drawing.Point(4, 22);
+            this.TabFileLookup.Name = "TabFileLookup";
+            this.TabFileLookup.Size = new System.Drawing.Size(786, 418);
+            this.TabFileLookup.TabIndex = 5;
+            this.TabFileLookup.Text = "File Lookup";
+            // 
+            // TabWhereUsed
+            // 
+            this.TabWhereUsed.Controls.Add(this.whereUsed1);
+            this.TabWhereUsed.Location = new System.Drawing.Point(4, 22);
+            this.TabWhereUsed.Name = "TabWhereUsed";
+            this.TabWhereUsed.Size = new System.Drawing.Size(786, 418);
+            this.TabWhereUsed.TabIndex = 4;
+            this.TabWhereUsed.Text = "Where Used";
+            this.TabWhereUsed.UseVisualStyleBackColor = true;
+            // 
+            // whereUsed1
+            // 
+            this.whereUsed1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.whereUsed1.Location = new System.Drawing.Point(0, 0);
+            this.whereUsed1.MinimumSize = new System.Drawing.Size(180, 150);
+            this.whereUsed1.Name = "whereUsed1";
+            this.whereUsed1.Size = new System.Drawing.Size(786, 418);
+            this.whereUsed1.TabIndex = 0;
             // 
             // TLP
             // 
@@ -108,23 +132,23 @@
             this.TLP.Size = new System.Drawing.Size(800, 450);
             this.TLP.TabIndex = 1;
             // 
-            // TabWhereUsed
+            // partLookup1
             // 
-            this.TabWhereUsed.Controls.Add(this.whereUsed1);
-            this.TabWhereUsed.Location = new System.Drawing.Point(4, 22);
-            this.TabWhereUsed.Name = "TabWhereUsed";
-            this.TabWhereUsed.Size = new System.Drawing.Size(786, 418);
-            this.TabWhereUsed.TabIndex = 4;
-            this.TabWhereUsed.Text = "Where Used";
-            this.TabWhereUsed.UseVisualStyleBackColor = true;
+            this.partLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.partLookup1.Location = new System.Drawing.Point(0, 0);
+            this.partLookup1.MinimumSize = new System.Drawing.Size(550, 200);
+            this.partLookup1.Name = "partLookup1";
+            this.partLookup1.Size = new System.Drawing.Size(786, 418);
+            this.partLookup1.TabIndex = 0;
             // 
-            // whereUsed1
+            // fileLookup1
             // 
-            this.whereUsed1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.whereUsed1.Location = new System.Drawing.Point(0, 0);
-            this.whereUsed1.Name = "whereUsed1";
-            this.whereUsed1.Size = new System.Drawing.Size(786, 418);
-            this.whereUsed1.TabIndex = 0;
+            this.fileLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileLookup1.Location = new System.Drawing.Point(0, 0);
+            this.fileLookup1.MinimumSize = new System.Drawing.Size(550, 200);
+            this.fileLookup1.Name = "fileLookup1";
+            this.fileLookup1.Size = new System.Drawing.Size(786, 418);
+            this.fileLookup1.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -137,8 +161,9 @@
             this.TabControl.ResumeLayout(false);
             this.TabCADFiles.ResumeLayout(false);
             this.TabPartLookup.ResumeLayout(false);
-            this.TLP.ResumeLayout(false);
+            this.TabFileLookup.ResumeLayout(false);
             this.TabWhereUsed.ResumeLayout(false);
+            this.TLP.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -146,12 +171,14 @@
         #endregion
         private System.Windows.Forms.TableLayoutPanel TLP;
         private System.Windows.Forms.TabPage TabPartLookup;
-        private Tools.PartLookup partLookup1;
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabCADFiles;
         private Tools.CADFiles cadFiles1;
         private System.Windows.Forms.TabPage TabWhereUsed;
         private Tools.WhereUsed whereUsed1;
+        private System.Windows.Forms.TabPage TabFileLookup;
+        private Tools.PartLookup partLookup1;
+        private Tools.FileLookup fileLookup1;
     }
 }
 
