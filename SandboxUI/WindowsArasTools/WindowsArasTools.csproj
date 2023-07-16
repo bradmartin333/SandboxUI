@@ -63,17 +63,11 @@
     <Compile Include="Tools\CADFiles.Designer.cs">
       <DependentUpon>CADFiles.cs</DependentUpon>
     </Compile>
-    <Compile Include="Tools\FileLookup.cs">
+    <Compile Include="Tools\Lookup.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="Tools\FileLookup.Designer.cs">
-      <DependentUpon>FileLookup.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Tools\PartLookup.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Tools\PartLookup.Designer.cs">
-      <DependentUpon>PartLookup.cs</DependentUpon>
+    <Compile Include="Tools\Lookup.Designer.cs">
+      <DependentUpon>Lookup.cs</DependentUpon>
     </Compile>
     <Compile Include="Tools\WhereUsed.cs">
       <SubType>UserControl</SubType>
@@ -96,11 +90,8 @@
     <EmbeddedResource Include="Tools\CADFiles.resx">
       <DependentUpon>CADFiles.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Tools\FileLookup.resx">
-      <DependentUpon>FileLookup.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Tools\PartLookup.resx">
-      <DependentUpon>PartLookup.cs</DependentUpon>
+    <EmbeddedResource Include="Tools\Lookup.resx">
+      <DependentUpon>Lookup.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Tools\WhereUsed.resx">
       <DependentUpon>WhereUsed.cs</DependentUpon>

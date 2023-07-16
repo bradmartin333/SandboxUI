@@ -31,27 +31,28 @@
             this.TabControl = new System.Windows.Forms.TabControl();
             this.TabCADFiles = new System.Windows.Forms.TabPage();
             this.cadFiles1 = new WindowsArasTools.Tools.CADFiles();
-            this.TabPartLookup = new System.Windows.Forms.TabPage();
-            this.TabFileLookup = new System.Windows.Forms.TabPage();
             this.TabWhereUsed = new System.Windows.Forms.TabPage();
             this.whereUsed1 = new WindowsArasTools.Tools.WhereUsed();
             this.TLP = new System.Windows.Forms.TableLayoutPanel();
-            this.partLookup1 = new WindowsArasTools.Tools.PartLookup();
-            this.fileLookup1 = new WindowsArasTools.Tools.FileLookup();
+            this.TabPartLookup = new System.Windows.Forms.TabPage();
+            this.TabDocumentLookup = new System.Windows.Forms.TabPage();
+            this.TabFunButton = new System.Windows.Forms.TabPage();
+            this.BtnFun = new System.Windows.Forms.Button();
+            this.CbxDanger = new System.Windows.Forms.CheckBox();
             this.TabControl.SuspendLayout();
             this.TabCADFiles.SuspendLayout();
-            this.TabPartLookup.SuspendLayout();
-            this.TabFileLookup.SuspendLayout();
             this.TabWhereUsed.SuspendLayout();
             this.TLP.SuspendLayout();
+            this.TabFunButton.SuspendLayout();
             this.SuspendLayout();
             // 
             // TabControl
             // 
             this.TabControl.Controls.Add(this.TabCADFiles);
-            this.TabControl.Controls.Add(this.TabPartLookup);
             this.TabControl.Controls.Add(this.TabWhereUsed);
-            this.TabControl.Controls.Add(this.TabFileLookup);
+            this.TabControl.Controls.Add(this.TabPartLookup);
+            this.TabControl.Controls.Add(this.TabDocumentLookup);
+            this.TabControl.Controls.Add(this.TabFunButton);
             this.TabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TabControl.Location = new System.Drawing.Point(3, 3);
             this.TabControl.Name = "TabControl";
@@ -77,26 +78,6 @@
             this.cadFiles1.Name = "cadFiles1";
             this.cadFiles1.Size = new System.Drawing.Size(786, 418);
             this.cadFiles1.TabIndex = 0;
-            // 
-            // TabPartLookup
-            // 
-            this.TabPartLookup.BackColor = System.Drawing.Color.LightBlue;
-            this.TabPartLookup.Controls.Add(this.partLookup1);
-            this.TabPartLookup.Location = new System.Drawing.Point(4, 22);
-            this.TabPartLookup.Name = "TabPartLookup";
-            this.TabPartLookup.Size = new System.Drawing.Size(786, 418);
-            this.TabPartLookup.TabIndex = 1;
-            this.TabPartLookup.Text = "Part Lookup";
-            // 
-            // TabFileLookup
-            // 
-            this.TabFileLookup.BackColor = System.Drawing.Color.LightGreen;
-            this.TabFileLookup.Controls.Add(this.fileLookup1);
-            this.TabFileLookup.Location = new System.Drawing.Point(4, 22);
-            this.TabFileLookup.Name = "TabFileLookup";
-            this.TabFileLookup.Size = new System.Drawing.Size(786, 418);
-            this.TabFileLookup.TabIndex = 5;
-            this.TabFileLookup.Text = "File Lookup";
             // 
             // TabWhereUsed
             // 
@@ -132,23 +113,60 @@
             this.TLP.Size = new System.Drawing.Size(800, 450);
             this.TLP.TabIndex = 1;
             // 
-            // partLookup1
+            // TabPartLookup
             // 
-            this.partLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.partLookup1.Location = new System.Drawing.Point(0, 0);
-            this.partLookup1.MinimumSize = new System.Drawing.Size(550, 200);
-            this.partLookup1.Name = "partLookup1";
-            this.partLookup1.Size = new System.Drawing.Size(786, 418);
-            this.partLookup1.TabIndex = 0;
+            this.TabPartLookup.BackColor = System.Drawing.Color.LightGreen;
+            this.TabPartLookup.Location = new System.Drawing.Point(4, 22);
+            this.TabPartLookup.Name = "TabPartLookup";
+            this.TabPartLookup.Padding = new System.Windows.Forms.Padding(3);
+            this.TabPartLookup.Size = new System.Drawing.Size(786, 418);
+            this.TabPartLookup.TabIndex = 5;
+            this.TabPartLookup.Text = "Part Lookup";
             // 
-            // fileLookup1
+            // TabDocumentLookup
             // 
-            this.fileLookup1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileLookup1.Location = new System.Drawing.Point(0, 0);
-            this.fileLookup1.MinimumSize = new System.Drawing.Size(550, 200);
-            this.fileLookup1.Name = "fileLookup1";
-            this.fileLookup1.Size = new System.Drawing.Size(786, 418);
-            this.fileLookup1.TabIndex = 0;
+            this.TabDocumentLookup.BackColor = System.Drawing.Color.LightBlue;
+            this.TabDocumentLookup.Location = new System.Drawing.Point(4, 22);
+            this.TabDocumentLookup.Name = "TabDocumentLookup";
+            this.TabDocumentLookup.Padding = new System.Windows.Forms.Padding(3);
+            this.TabDocumentLookup.Size = new System.Drawing.Size(786, 418);
+            this.TabDocumentLookup.TabIndex = 6;
+            this.TabDocumentLookup.Text = "Document Lookup";
+            // 
+            // TabFunButton
+            // 
+            this.TabFunButton.Controls.Add(this.CbxDanger);
+            this.TabFunButton.Controls.Add(this.BtnFun);
+            this.TabFunButton.Location = new System.Drawing.Point(4, 22);
+            this.TabFunButton.Name = "TabFunButton";
+            this.TabFunButton.Padding = new System.Windows.Forms.Padding(3);
+            this.TabFunButton.Size = new System.Drawing.Size(786, 418);
+            this.TabFunButton.TabIndex = 7;
+            this.TabFunButton.Text = "Fun Button";
+            this.TabFunButton.UseVisualStyleBackColor = true;
+            // 
+            // BtnFun
+            // 
+            this.BtnFun.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnFun.Location = new System.Drawing.Point(357, 167);
+            this.BtnFun.Name = "BtnFun";
+            this.BtnFun.Size = new System.Drawing.Size(59, 53);
+            this.BtnFun.TabIndex = 0;
+            this.BtnFun.Text = "fun";
+            this.BtnFun.UseVisualStyleBackColor = true;
+            this.BtnFun.Click += new System.EventHandler(this.BtnFun_Click);
+            // 
+            // CbxDanger
+            // 
+            this.CbxDanger.AutoSize = true;
+            this.CbxDanger.Checked = true;
+            this.CbxDanger.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CbxDanger.Location = new System.Drawing.Point(64, 54);
+            this.CbxDanger.Name = "CbxDanger";
+            this.CbxDanger.Size = new System.Drawing.Size(61, 17);
+            this.CbxDanger.TabIndex = 1;
+            this.CbxDanger.Text = "Danger";
+            this.CbxDanger.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -160,25 +178,26 @@
             this.Text = "Windows Aras Tools";
             this.TabControl.ResumeLayout(false);
             this.TabCADFiles.ResumeLayout(false);
-            this.TabPartLookup.ResumeLayout(false);
-            this.TabFileLookup.ResumeLayout(false);
             this.TabWhereUsed.ResumeLayout(false);
             this.TLP.ResumeLayout(false);
+            this.TabFunButton.ResumeLayout(false);
+            this.TabFunButton.PerformLayout();
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private System.Windows.Forms.TableLayoutPanel TLP;
-        private System.Windows.Forms.TabPage TabPartLookup;
         private System.Windows.Forms.TabControl TabControl;
         private System.Windows.Forms.TabPage TabCADFiles;
         private Tools.CADFiles cadFiles1;
         private System.Windows.Forms.TabPage TabWhereUsed;
         private Tools.WhereUsed whereUsed1;
-        private System.Windows.Forms.TabPage TabFileLookup;
-        private Tools.PartLookup partLookup1;
-        private Tools.FileLookup fileLookup1;
+        private System.Windows.Forms.TabPage TabPartLookup;
+        private System.Windows.Forms.TabPage TabDocumentLookup;
+        private System.Windows.Forms.TabPage TabFunButton;
+        private System.Windows.Forms.Button BtnFun;
+        private System.Windows.Forms.CheckBox CbxDanger;
     }
 }
 
