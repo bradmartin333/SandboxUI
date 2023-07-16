@@ -29,7 +29,7 @@ namespace WindowsArasTools
         private void BtnFun_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-            int randomNumber = 9;// random.Next(0, 10);
+            int randomNumber = random.Next(0, 10);
             switch (randomNumber)
             {
                 case 0:
