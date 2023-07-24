@@ -17,23 +17,26 @@ namespace WindowsArasTools.Tools
         public WhereUsed()
         {
             InitializeComponent();
+            Directory.CreateDirectory(DownloadPath);
         }
 
         private void TxtPartNumber_TextChanged(object sender, EventArgs e)
         {
             QueryPartNumber = null;
             WebBrowser.DocumentText = "";
-            if (System.Text.RegularExpressions.Regex.IsMatch(TxtPartNumber.Text, @"^(\d{3}-\d{4})$"))
+            if (System.Text.RegularExpressions.Regex.IsMatch(TxtPartNumber.Text, @"^(\d{3}-\d{3}).*$"))
             {
                 TxtPartNumber.BackColor = Color.White;
                 BtnRun.BackColor = Color.LimeGreen;
                 BtnRun.Enabled = true;
+                BtnChurnCSV.Enabled = true;
             }
             else
             {
                 TxtPartNumber.BackColor = Color.Firebrick;
                 BtnRun.BackColor = Color.White;
                 BtnRun.Enabled = false;
+                BtnChurnCSV.Enabled = false;
             }
         }
 
@@ -41,11 +44,13 @@ namespace WindowsArasTools.Tools
         {
             QueryPartNumber = TxtPartNumber.Text;
             BtnRun.BackColor = Color.Gold;
+            BtnChurnCSV.Enabled = false;
             Application.DoEvents();
             WebBrowser.DocumentText = "";
             string result = await Task.Run(() => GetAllWhereUsedQuantity());
             WebBrowser.DocumentText = result;
             BtnRun.BackColor = Color.LimeGreen;
+            BtnChurnCSV.Enabled = true;
         }
 
         private static string GetAllWhereUsedQuantity()
@@ -61,13 +66,21 @@ namespace WindowsArasTools.Tools
                 {
                     IReadOnlyElement[] whereUsedList = fetchWhereUsed.First().Elements().Where(x => x.Attribute("type").Value == "Part").ToArray();
                     string[] whereUsedParts = whereUsedList.Select(x => 
-                        System.Text.RegularExpressions.Regex.Match(x.Attribute("keyed_name").Value, @".*(\d{3}-\d{4}.*) - .*").Groups[1].Value)
+                        System.Text.RegularExpressions.Regex.Match(x.Attribute("keyed_name").Value, @".*(\d{3}-\d{3}.*) - .*").Groups[1].Value)
                         .Distinct().ToArray();
                     foreach (string partNumber in whereUsedParts)
                     {
+                        if (string.IsNullOrEmpty(partNumber))
+                            continue;
                         string partID = GetPartID(partNumber);
+                        if (string.IsNullOrEmpty(partID))
+                            continue;
                         string name = GetPartName(partNumber);
+                        if (name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
+                            continue;
                         string quantity = GetBOMQuantity(partID, QueryPartNumber);
+                        if (string.IsNullOrEmpty(quantity))
+                            continue;
                         output += $"<tr><td>{partNumber}</td><td>{name}</td><td>{quantity}</td></tr>";
                     }
                 }
@@ -113,11 +126,74 @@ namespace WindowsArasTools.Tools
         {
             if (!string.IsNullOrEmpty(QueryPartNumber))
             {
-                Directory.CreateDirectory(DownloadPath);
                 string fileName = Path.Combine(DownloadPath, $"{QueryPartNumber}.html");
                 File.WriteAllText(fileName, WebBrowser.DocumentText);
                 MessageBox.Show($"File saved to: {fileName}");
             }
+        }
+
+        private async void BtnChurnCSV_Click(object sender, EventArgs e)
+        {
+            // Prompt the user to open a .txt file
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt";
+            openFileDialog.RestoreDirectory = true;
+
+            // If the user selected a file, read the lines into an array of strings
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                BtnChurnCSV.Enabled = false;
+                BtnRun.BackColor = Color.Gold;
+                Application.DoEvents();
+
+                string[] partNumbers = File.ReadAllLines(openFileDialog.FileName);
+                string output = await Task.Run(() => ChurnProcess(partNumbers));
+                File.WriteAllText(Path.Combine(DownloadPath, "churn.tsv"), output);
+
+                BtnChurnCSV.Enabled = true;
+                BtnRun.BackColor = Color.LimeGreen;
+            }   
+        }
+
+        private string ChurnProcess(string[] partNumbers)
+        {
+            // Iterate through the part numbers and create an output .csv with the
+            // part number, where used part number, where used part name, and quantity
+            string output = "Part Number\tWhere Used Part Number\tWhere Used Part Name\tQuantity\r\n";
+            for (int i = 0; i < partNumbers.Length; i++)
+            {
+                string queryPartNumber = partNumbers[i];
+                string progress = $"Processing {queryPartNumber}: {(i + 1)/(double)partNumbers.Length:P}";
+                WebBrowser.Invoke(new Action(() => WebBrowser.DocumentText = $"<html><body>{progress}</body></html>"));
+                if (string.IsNullOrEmpty(queryPartNumber) || !System.Text.RegularExpressions.Regex.IsMatch(queryPartNumber, @"^(\d{3}-\d{3}).*$"))
+                    continue;
+                string queryID = GetPartID(queryPartNumber);
+                IReadOnlyElement[] fetchWhereUsed = FormMain.Connection.Apply($@"<Item type='Part' id='{queryID}' action='getItemWhereUsed'/>")
+                                                        .Items().First().Elements().ToArray();
+                if (fetchWhereUsed.Any())
+                {
+                    IReadOnlyElement[] whereUsedList = fetchWhereUsed.First().Elements().Where(x => x.Attribute("type").Value == "Part").ToArray();
+                    string[] whereUsedParts = whereUsedList.Select(x =>
+                        System.Text.RegularExpressions.Regex.Match(x.Attribute("keyed_name").Value, @".*(\d{3}-\d{3}.*) - .*").Groups[1].Value)
+                        .Distinct().ToArray();
+                    foreach (string partNumber in whereUsedParts)
+                    {
+                        if (string.IsNullOrEmpty(partNumber))
+                            continue;
+                        string partID = GetPartID(partNumber);
+                        if (string.IsNullOrEmpty(partID))
+                            continue;
+                        string name = GetPartName(partNumber);
+                        if (name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
+                            continue;
+                        string quantity = GetBOMQuantity(partID, queryPartNumber);
+                        if (string.IsNullOrEmpty(quantity))
+                            continue;
+                        output += $"{queryPartNumber}\t{partNumber}\t{name}\t{quantity}\r\n";
+                    }
+                }
+            }
+            return output;
         }
     }
 }
