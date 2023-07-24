@@ -76,7 +76,7 @@ namespace WindowsArasTools.Tools
                         if (string.IsNullOrEmpty(partID))
                             continue;
                         string name = GetPartName(partNumber);
-                        if (name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
+                        if (string.IsNullOrEmpty(name) || name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
                             continue;
                         string quantity = GetBOMQuantity(partID, QueryPartNumber);
                         if (string.IsNullOrEmpty(quantity))
@@ -184,7 +184,7 @@ namespace WindowsArasTools.Tools
                         if (string.IsNullOrEmpty(partID))
                             continue;
                         string name = GetPartName(partNumber);
-                        if (name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
+                        if (string.IsNullOrEmpty(name) || name.ToLower().Contains("deprecate") || name.ToLower().Contains("obsolete"))
                             continue;
                         string quantity = GetBOMQuantity(partID, queryPartNumber);
                         if (string.IsNullOrEmpty(quantity))
