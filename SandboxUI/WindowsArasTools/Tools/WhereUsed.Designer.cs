@@ -33,7 +33,7 @@
             this.BtnRun = new System.Windows.Forms.Button();
             this.WebBrowser = new System.Windows.Forms.WebBrowser();
             this.BtnSave = new System.Windows.Forms.Button();
-            this.BtnChurnCSV = new System.Windows.Forms.Button();
+            this.BtnChurnList = new System.Windows.Forms.Button();
             this.TLP.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -46,7 +46,7 @@
             this.TLP.Controls.Add(this.BtnRun, 0, 1);
             this.TLP.Controls.Add(this.WebBrowser, 0, 2);
             this.TLP.Controls.Add(this.BtnSave, 0, 3);
-            this.TLP.Controls.Add(this.BtnChurnCSV, 1, 0);
+            this.TLP.Controls.Add(this.BtnChurnList, 1, 0);
             this.TLP.Dock = System.Windows.Forms.DockStyle.Fill;
             this.TLP.Location = new System.Drawing.Point(0, 0);
             this.TLP.Name = "TLP";
@@ -109,19 +109,19 @@
             this.BtnSave.UseVisualStyleBackColor = false;
             this.BtnSave.Click += new System.EventHandler(this.BtnSave_Click);
             // 
-            // BtnChurnCSV
+            // BtnChurnList
             // 
-            this.BtnChurnCSV.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.BtnChurnList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.BtnChurnCSV.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.BtnChurnCSV.Location = new System.Drawing.Point(102, 3);
-            this.BtnChurnCSV.Name = "BtnChurnCSV";
-            this.BtnChurnCSV.Size = new System.Drawing.Size(75, 23);
-            this.BtnChurnCSV.TabIndex = 4;
-            this.BtnChurnCSV.Text = "Churn CSV";
-            this.BtnChurnCSV.UseVisualStyleBackColor = true;
-            this.BtnChurnCSV.Click += new System.EventHandler(this.BtnChurnCSV_Click);
+            this.BtnChurnList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.BtnChurnList.Location = new System.Drawing.Point(102, 3);
+            this.BtnChurnList.Name = "BtnChurnList";
+            this.BtnChurnList.Size = new System.Drawing.Size(75, 23);
+            this.BtnChurnList.TabIndex = 4;
+            this.BtnChurnList.Text = "Churn List";
+            this.BtnChurnList.UseVisualStyleBackColor = true;
+            this.BtnChurnList.Click += new System.EventHandler(this.BtnChurnCSV_Click);
             // 
             // WhereUsed
             // 
@@ -144,6 +144,6 @@
         private System.Windows.Forms.TextBox TxtPartNumber;
         private System.Windows.Forms.WebBrowser WebBrowser;
         private System.Windows.Forms.Button BtnSave;
-        private System.Windows.Forms.Button BtnChurnCSV;
+        private System.Windows.Forms.Button BtnChurnList;
     }
 }

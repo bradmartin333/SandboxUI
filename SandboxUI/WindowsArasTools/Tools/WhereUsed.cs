@@ -29,14 +29,14 @@ namespace WindowsArasTools.Tools
                 TxtPartNumber.BackColor = Color.White;
                 BtnRun.BackColor = Color.LimeGreen;
                 BtnRun.Enabled = true;
-                BtnChurnCSV.Enabled = true;
+                BtnChurnList.Enabled = true;
             }
             else
             {
                 TxtPartNumber.BackColor = Color.Firebrick;
                 BtnRun.BackColor = Color.White;
                 BtnRun.Enabled = false;
-                BtnChurnCSV.Enabled = false;
+                BtnChurnList.Enabled = false;
             }
         }
 
@@ -44,13 +44,13 @@ namespace WindowsArasTools.Tools
         {
             QueryPartNumber = TxtPartNumber.Text;
             BtnRun.BackColor = Color.Gold;
-            BtnChurnCSV.Enabled = false;
+            BtnChurnList.Enabled = false;
             Application.DoEvents();
             WebBrowser.DocumentText = "";
             string result = await Task.Run(() => GetAllWhereUsedQuantity());
             WebBrowser.DocumentText = result;
             BtnRun.BackColor = Color.LimeGreen;
-            BtnChurnCSV.Enabled = true;
+            BtnChurnList.Enabled = true;
         }
 
         private static string GetAllWhereUsedQuantity()
@@ -138,11 +138,12 @@ namespace WindowsArasTools.Tools
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt";
             openFileDialog.RestoreDirectory = true;
+            openFileDialog.Title = "Select a .txt file with a list of part numbers";
 
             // If the user selected a file, read the lines into an array of strings
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                BtnChurnCSV.Enabled = false;
+                BtnChurnList.Enabled = false;
                 BtnRun.BackColor = Color.Gold;
                 Application.DoEvents();
 
@@ -150,7 +151,7 @@ namespace WindowsArasTools.Tools
                 string output = await Task.Run(() => ChurnProcess(partNumbers));
                 File.WriteAllText(Path.Combine(DownloadPath, "churn.tsv"), output);
 
-                BtnChurnCSV.Enabled = true;
+                BtnChurnList.Enabled = true;
                 BtnRun.BackColor = Color.LimeGreen;
             }   
         }
